@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
+import { ProfileStoreService } from '../../core/services/profile-store.service';
+import { AppProfile } from '../../core/models/profile.model';
 
 import { LoginModalComponent } from '../../modals/auth/login-modal/login-modal.component';
 import { AccountTypeModalComponent } from '../../modals/auth/account-type-modal/account-type-modal.component';
+import { EditTextModalComponent } from '../../modals/common/edit-text-modal/edit-text-modal.component';
 
-type Role = 'artist' | 'establishment';
+import { PhotoService } from '../../core/services/photo.service';
 
 @Component({
   standalone: false,
@@ -14,29 +17,15 @@ type Role = 'artist' | 'establishment';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
-  profile = {
-    role: 'artist' as Role,
-    roleLabel: 'Artista',
-    displayName: 'Artista Demo',
-    categoryOrStyle: 'Abstracto',
-    bio: 'Resumen del artista. (editable)',
-    profileImage: 'https://i.pravatar.cc/240?img=12',
-    gallery: [
-      'https://picsum.photos/id/1025/600/600',
-      'https://picsum.photos/id/1035/600/600',
-      'https://picsum.photos/id/1062/600/600',
-      'https://picsum.photos/id/1011/600/600',
-      'https://picsum.photos/id/1015/600/600',
-      'https://picsum.photos/id/1020/600/600',
-    ],
-    lastNameChangeISO: null as string | null,
-  };
+  profile$ = this.profileStore.profile$;
 
   constructor(
     public auth: AuthService,
+    private profileStore: ProfileStoreService,
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController
-  ) {}
+    private toastCtrl: ToastController,
+    private photo: PhotoService,
+  ) { }
 
   async openLogin() {
     const m = await this.modalCtrl.create({
@@ -60,21 +49,20 @@ export class ProfilePage {
     this.auth.logout();
   }
 
-  async changeProfileImage() {
-    const t = await this.toastCtrl.create({
-      message: 'Aquí luego conectamos cámara/galería (Capacitor).',
-      duration: 1200,
-      position: 'bottom',
-    });
-    await t.present();
+  // helpers UI
+  roleLabel(p: AppProfile) {
+    return p.role === 'artist' ? 'Artista' : 'Establecimiento';
   }
 
-  async editName() {
-    // Regla: solo 1 cambio cada 30 días
-    if (this.profile.lastNameChangeISO) {
-      const last = new Date(this.profile.lastNameChangeISO).getTime();
-      const now = Date.now();
-      const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+  categoryOrStyle(p: AppProfile) {
+    return p.role === 'artist' ? (p.artisticStyle || 'Sin estilo') : (p.category || 'Sin categoría');
+  }
+
+  async editName(p: AppProfile) {
+    // regla 30 días
+    if (p.lastNameChangeISO) {
+      const last = new Date(p.lastNameChangeISO).getTime();
+      const diffDays = Math.floor((Date.now() - last) / (1000 * 60 * 60 * 24));
       if (diffDays < 30) {
         const t = await this.toastCtrl.create({
           message: `Solo puedes cambiar el nombre cada 30 días. Faltan ${30 - diffDays} días.`,
@@ -85,59 +73,122 @@ export class ProfilePage {
       }
     }
 
-    // Por ahora mock: cambia nombre fijo
-    this.profile.displayName = this.profile.displayName + ' ✨';
-    this.profile.lastNameChangeISO = new Date().toISOString();
-
-    const t = await this.toastCtrl.create({
-      message: 'Nombre actualizado (mock).',
-      duration: 1200,
-      position: 'bottom',
+    const m = await this.modalCtrl.create({
+      component: EditTextModalComponent,
+      componentProps: {
+        title: 'Editar nombre',
+        label: 'Nombre',
+        placeholder: 'Tu nombre público',
+        value: p.displayName,
+        minLength: 3,
+        multiline: false,
+      },
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
     });
-    await t.present();
-  }
 
-  async editCategoryOrStyle() {
-    this.profile.categoryOrStyle =
-      this.profile.role === 'artist' ? 'Contemporáneo' : 'Cafetería';
+    await m.present();
+    const { data } = await m.onWillDismiss();
+    if (!data?.text) return;
+
+    this.profileStore.patchProfile({
+      displayName: data.text,
+      lastNameChangeISO: new Date().toISOString(),
+    });
+
     const t = await this.toastCtrl.create({
-      message: 'Actualizado (mock).',
+      message: 'Nombre actualizado.',
       duration: 1000,
       position: 'bottom',
     });
     await t.present();
   }
 
-  async editBio() {
-    this.profile.bio = 'Descripción actualizada (mock).';
+
+  async addPhoto(p: AppProfile) {
+    const img = 'https://picsum.photos/id/1040/600/600';
+    this.profileStore.patchProfile({ gallery: [img, ...(p.gallery || [])] });
+  }
+
+  removePhoto(p: AppProfile, idx: number) {
+    const next = [...(p.gallery || [])];
+    next.splice(idx, 1);
+    this.profileStore.patchProfile({ gallery: next });
+  }
+
+  async editBio(p: AppProfile) {
+    if (p.role !== 'artist') return;
+
+    const m = await this.modalCtrl.create({
+      component: EditTextModalComponent,
+      componentProps: {
+        title: 'Editar descripción',
+        label: 'Descripción',
+        placeholder: 'Cuéntanos sobre ti',
+        value: p.bio || '',
+        minLength: 20,
+        multiline: true,
+      },
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+
+    await m.present();
+    const { data } = await m.onWillDismiss();
+    if (!data?.text) return;
+
+    this.profileStore.patchProfile({ bio: data.text });
+
     const t = await this.toastCtrl.create({
-      message: 'Descripción actualizada (mock).',
+      message: 'Descripción actualizada.',
       duration: 1000,
       position: 'bottom',
     });
     await t.present();
   }
 
-  async addPhotos() {
-    this.profile.gallery = [
-      'https://picsum.photos/id/1040/600/600',
-      ...this.profile.gallery,
-    ];
+  async editCategoryOrStyle(p: AppProfile) {
+    const isArtist = p.role === 'artist';
+
+    const m = await this.modalCtrl.create({
+      component: EditTextModalComponent,
+      componentProps: {
+        title: isArtist ? 'Editar corriente artística' : 'Editar categoría',
+        label: isArtist ? 'Corriente artística' : 'Categoría',
+        placeholder: isArtist ? 'Ej. Abstracto, Realismo...' : 'Ej. Cafetería, Restaurante...',
+        value: isArtist ? (p.artisticStyle || '') : (p.category || ''),
+        minLength: 2,
+        multiline: false,
+      },
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+
+    await m.present();
+    const { data } = await m.onWillDismiss();
+    if (!data?.text) return;
+
+    if (isArtist) this.profileStore.patchProfile({ artisticStyle: data.text });
+    else this.profileStore.patchProfile({ category: data.text });
+
     const t = await this.toastCtrl.create({
-      message: 'Foto añadida (mock).',
+      message: 'Actualizado.',
       duration: 900,
       position: 'bottom',
     });
     await t.present();
   }
 
-  async removePhoto(index: number) {
-    this.profile.gallery.splice(index, 1);
-    const t = await this.toastCtrl.create({
-      message: 'Foto eliminada (mock).',
-      duration: 900,
-      position: 'bottom',
-    });
-    await t.present();
+  async changeProfileImage(p: AppProfile) {
+    const dataUrl = await this.photo.pickSingleBase64();
+    if (!dataUrl) return;
+    this.profileStore.patchProfile({ profileImage: dataUrl });
   }
+
+  async addPhotos(p: AppProfile) {
+    const imgs = await this.photo.pickMultipleBase64(10);
+    if (!imgs.length) return;
+    this.profileStore.patchProfile({ gallery: [...imgs, ...(p.gallery || [])] });
+  }
+
 }

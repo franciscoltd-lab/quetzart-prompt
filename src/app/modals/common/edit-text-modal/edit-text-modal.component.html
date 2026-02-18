@@ -1,0 +1,47 @@
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <div class="wrap">
+
+      <div class="qz-glass block">
+        <div class="block-title">{{ label }}</div>
+
+        <ion-item class="item" lines="none" *ngIf="!multiline">
+          <ion-input
+            [placeholder]="placeholder"
+            labelPlacement="stacked"
+            formControlName="text"
+            [value]="form.controls.text.value"
+            (ionInput)="form.controls.text.setValue(($any($event).detail.value || ''))">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="item" lines="none" *ngIf="multiline">
+          <ion-textarea
+            [placeholder]="placeholder"
+            autoGrow="true"
+            formControlName="text">
+          </ion-textarea>
+        </ion-item>
+
+        <div class="err" *ngIf="form.controls.text.touched && form.controls.text.invalid">
+          Escribe mínimo {{ minLength }} caracteres.
+        </div>
+
+        <ion-button expand="block" (click)="save()" [disabled]="form.invalid">
+          Guardar
+        </ion-button>
+      </div>
+
+      <div style="height: 30px;"></div>
+    </div>
+  </div>
+</ion-content>

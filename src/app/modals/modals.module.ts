@@ -13,6 +13,7 @@ import { LoginModalComponent } from './auth/login-modal/login-modal.component';
 import { AccountTypeModalComponent } from './auth/account-type-modal/account-type-modal.component';
 import { RegisterArtistModalComponent } from './auth/register-artist-modal/register-artist-modal.component';
 import { RegisterEstablishmentModalComponent } from './auth/register-establishment-modal/register-establishment-modal.component';
+import { EditTextModalComponent } from './common/edit-text-modal/edit-text-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { RegisterEstablishmentModalComponent } from './auth/register-establishme
     AccountTypeModalComponent,
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
+    EditTextModalComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { RegisterEstablishmentModalComponent } from './auth/register-establishme
     AccountTypeModalComponent,
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
+    EditTextModalComponent
   ],
 })
 export class ModalsModule {}

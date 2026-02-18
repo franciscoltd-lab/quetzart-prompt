@@ -1,0 +1,27 @@
+.wrap {
+  padding: 16px;
+}
+
+.block {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.block-title {
+  font-weight: 850;
+  font-size: 15px;
+  letter-spacing: -0.15px;
+}
+
+.item {
+  --background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+}
+
+.err {
+  margin-top: -2px;
+  font-size: 12px;
+  color: rgba(255, 120, 120, 0.95);
+}

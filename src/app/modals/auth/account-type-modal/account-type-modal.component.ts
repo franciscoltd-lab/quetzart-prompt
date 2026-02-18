@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { RegisterArtistModalComponent } from '../register-artist-modal/register-artist-modal.component';
+import { RegisterEstablishmentModalComponent } from '../register-establishment-modal/register-establishment-modal.component';
 
 @Component({
   standalone: false,
@@ -10,10 +12,24 @@ import { ModalController } from '@ionic/angular';
 export class AccountTypeModalComponent {
   constructor(private modalCtrl: ModalController) {}
 
-  dismiss() { this.modalCtrl.dismiss(); }
+  dismiss() {
+    this.modalCtrl.dismiss();
+  }
 
-  select(role: 'artist' | 'establishment') {
-    // siguiente subparte: abrir modal de registro correspondiente
-    alert(`Seleccionado: ${role}. Siguiente: formulario de registro.`);
+  async select(role: 'artist' | 'establishment') {
+    // Cierra selector
+    await this.dismiss();
+
+    // Abre registro full screen (sheet)
+    const component =
+      role === 'artist' ? RegisterArtistModalComponent : RegisterEstablishmentModalComponent;
+
+    const m = await this.modalCtrl.create({
+      component,
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+
+    await m.present();
   }
 }

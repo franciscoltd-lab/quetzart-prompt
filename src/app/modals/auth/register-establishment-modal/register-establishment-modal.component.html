@@ -1,3 +1,70 @@
-<p>
-  register-establishment-modal works!
-</p>
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Registro - Establecimiento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <div class="wrap">
+
+      <div class="qz-glass block">
+        <div class="block-title">Foto de perfil (opcional)</div>
+
+        <div class="avatar-row">
+          <img class="avatar" [src]="profileImagePreview || 'assets/avatar-placeholder.png'" alt="avatar" />
+          <ion-button (click)="pickProfileImage()" fill="outline">Elegir foto</ion-button>
+        </div>
+      </div>
+
+      <form [formGroup]="form" class="qz-glass block">
+        <div class="block-title">Datos del establecimiento</div>
+
+        <ion-item class="item" lines="none">
+          <ion-input label="Nombre" labelPlacement="stacked" formControlName="name"></ion-input>
+        </ion-item>
+        <div class="err" *ngIf="f.name.touched && f.name.invalid">Nombre requerido.</div>
+
+        <ion-item class="item" lines="none">
+          <ion-input label="Calle" labelPlacement="stacked" formControlName="street"></ion-input>
+        </ion-item>
+        <div class="err" *ngIf="f.street.touched && f.street.invalid">Calle requerida.</div>
+
+        <ion-item class="item" lines="none">
+          <ion-input label="Número" labelPlacement="stacked" formControlName="number"></ion-input>
+        </ion-item>
+        <div class="err" *ngIf="f.number.touched && f.number.invalid">Número requerido.</div>
+
+        <ion-item class="item" lines="none">
+          <ion-input
+            label="CP"
+            labelPlacement="stacked"
+            formControlName="postalCode"
+            inputmode="numeric"
+            (ionInput)="onPostalCodeChange()">
+          </ion-input>
+        </ion-item>
+        <div class="err" *ngIf="f.postalCode.touched && f.postalCode.invalid">CP inválido (5 dígitos).</div>
+
+        <div class="qz-glass mini" *ngIf="inferredColony">
+          <div class="mini-row"><span class="dim">Colonia:</span> {{ inferredColony }}</div>
+          <div class="mini-row"><span class="dim">Municipio:</span> {{ inferredMunicipality }}</div>
+        </div>
+
+        <ion-item class="item" lines="none">
+          <ion-input label="Categoría (restaurante, cafetería...)" labelPlacement="stacked" formControlName="category"></ion-input>
+        </ion-item>
+        <div class="err" *ngIf="f.category.touched && f.category.invalid">Categoría requerida.</div>
+      </form>
+
+      <ion-button expand="block" class="cta" [disabled]="form.invalid" (click)="submit()">
+        Registrar
+      </ion-button>
+
+      <div style="height: 30px;"></div>
+    </div>
+  </div>
+</ion-content>
