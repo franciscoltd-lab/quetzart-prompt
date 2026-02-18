@@ -1,0 +1,38 @@
+.split {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+.half {
+  border: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+  color: white;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.half.artist {
+  background-image: radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.55), transparent 60%);
+}
+
+.half.est {
+  background-image: radial-gradient(circle at 80% 20%, rgba(0, 216, 255, 0.35), transparent 60%);
+}
+
+.label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}

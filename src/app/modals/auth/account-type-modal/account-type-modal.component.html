@@ -1,3 +1,22 @@
-<p>
-  account-type-modal works!
-</p>
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Crear cuenta</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <div class="split">
+      <button class="half artist" (click)="select('artist')">
+        <div class="label">ARTISTA</div>
+      </button>
+
+      <button class="half est" (click)="select('establishment')">
+        <div class="label">ESTABLECIMIENTO</div>
+      </button>
+    </div>
+  </div>
+</ion-content>

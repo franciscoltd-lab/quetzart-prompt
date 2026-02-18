@@ -1,3 +1,27 @@
-<p>
-  login-modal works!
-</p>
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Iniciar sesión</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <div style="padding:16px; display:grid; gap:12px;">
+      <div class="qz-glass" style="padding:14px; display:grid; gap:10px;">
+        <ion-item class="qz-glass" lines="none">
+          <ion-input label="Email" labelPlacement="stacked" type="email" [(ngModel)]="email"></ion-input>
+        </ion-item>
+
+        <ion-item class="qz-glass" lines="none">
+          <ion-input label="Contraseña" labelPlacement="stacked" type="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="loginAsArtist()">Entrar como Artista (mock)</ion-button>
+        <ion-button expand="block" fill="outline" (click)="loginAsEstablishment()">Entrar como Establecimiento (mock)</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

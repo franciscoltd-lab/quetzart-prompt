@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   standalone: false,
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './account-type-modal.component.html',
   styleUrls: ['./account-type-modal.component.scss'],
 })
-export class AccountTypeModalComponent  implements OnInit {
+export class AccountTypeModalComponent {
+  constructor(private modalCtrl: ModalController) {}
 
-  constructor() { }
+  dismiss() { this.modalCtrl.dismiss(); }
 
-  ngOnInit() {}
-
+  select(role: 'artist' | 'establishment') {
+    // siguiente subparte: abrir modal de registro correspondiente
+    alert(`Seleccionado: ${role}. Siguiente: formulario de registro.`);
+  }
 }

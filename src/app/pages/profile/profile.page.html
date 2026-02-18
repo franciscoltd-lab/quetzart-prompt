@@ -1,13 +1,97 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Perfil</ion-title>
+
+    <ion-buttons slot="end" *ngIf="auth.isLoggedIn()">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="qz-bg">
+    <div class="profile-wrap">
+
+      <!-- NO LOGEADO -->
+      <ng-container *ngIf="!auth.isLoggedIn(); else loggedTemplate">
+        <div class="qz-glass welcome">
+          <div class="t1">Tu perfil en Quetzart</div>
+          <div class="t2">Regístrate como artista o establecimiento para conectar y exhibir.</div>
+
+          <div class="actions">
+            <ion-button expand="block" (click)="openLogin()">Iniciar sesión</ion-button>
+            <ion-button expand="block" fill="outline" (click)="openAccountType()">Crear cuenta</ion-button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- LOGEADO -->
+      <ng-template #loggedTemplate>
+        <div class="qz-glass header-card">
+          <div class="avatar-wrap">
+            <img class="avatar" [src]="profile.profileImage" alt="avatar" />
+            <ion-button size="small" class="edit-avatar" (click)="changeProfileImage()">
+              <ion-icon name="camera-outline"></ion-icon>
+            </ion-button>
+          </div>
+
+          <div class="info">
+            <div class="name-row">
+              <div class="name">{{ profile.displayName }}</div>
+              <ion-button size="small" fill="clear" (click)="editName()">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+            </div>
+
+            <div class="meta">
+              <span class="qz-pill">{{ profile.roleLabel }}</span>
+              <span class="qz-pill">{{ profile.categoryOrStyle }}</span>
+            </div>
+
+            <!-- Bio solo artista -->
+            <div class="bio" *ngIf="profile.role === 'artist'">
+              {{ profile.bio }}
+            </div>
+
+            <ion-button expand="block" fill="outline" (click)="editCategoryOrStyle()">
+              Editar {{ profile.role === 'artist' ? 'corriente artística' : 'categoría' }}
+            </ion-button>
+
+            <ion-button expand="block" fill="outline" *ngIf="profile.role === 'artist'" (click)="editBio()">
+              Editar descripción
+            </ion-button>
+          </div>
+        </div>
+
+        <!-- Mosaico -->
+        <div class="qz-glass grid-card">
+          <div class="grid-head">
+            <div class="grid-title">{{ profile.role === 'artist' ? 'Portafolio' : 'Fotos del establecimiento' }}</div>
+            <ion-button size="small" (click)="addPhotos()">
+              <ion-icon name="add-outline"></ion-icon>
+              Añadir
+            </ion-button>
+          </div>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4" *ngFor="let img of profile.gallery; let i = index">
+                <div class="thumb">
+                  <img [src]="img" alt="img" />
+                  <ion-button class="del" size="small" fill="clear" (click)="removePhoto(i)">
+                    <ion-icon name="close-circle"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div style="height: 90px;"></div>
+      </ng-template>
+
+    </div>
+  </div>
 </ion-content>
