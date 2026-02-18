@@ -1,0 +1,7 @@
+{
+  "name": "quetzart",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
