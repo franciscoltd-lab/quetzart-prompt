@@ -1,0 +1,125 @@
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Quetzart</ion-title>
+
+    <ion-buttons slot="end" *ngIf="auth.isLoggedIn()">
+      <ion-button (click)="openNotifications()">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <div class="home-wrap">
+
+      <!-- HERO / Bienvenida -->
+      <div class="hero qz-glass">
+        <div class="hero-top">
+          <div class="hero-title">Descubre arte y espacios</div>
+          <div class="hero-sub">
+            Conecta <span class="dim">artistas</span> con <span class="dim">establecimientos</span>.
+          </div>
+        </div>
+
+        <!-- Buscador -->
+        <ion-searchbar class="qz-input" placeholder="Buscar artistas o establecimientos" animated="true">
+        </ion-searchbar>
+
+        <!-- Quick filters (solo UI por ahora) -->
+        <div class="quick-row">
+          <div class="qz-pill">Obras</div>
+          <div class="qz-pill">Artistas</div>
+          <div class="qz-pill">Establecimientos</div>
+          <div class="qz-pill">Cerca de mí</div>
+        </div>
+      </div>
+
+      <!-- ARTISTAS / OBRAS -->
+      <div class="section qz-glass">
+        <div class="section-head">
+          <div class="section-title">Artistas</div>
+          <ion-button fill="clear" size="small" (click)="openArtistsList()">
+            Ver todos
+          </ion-button>
+        </div>
+
+        <div class="section-sub">Obras destacadas de artistas registrados</div>
+
+        <swiper-container #artSwiper init="false" class="qz-swiper">
+          <swiper-slide *ngFor="let artwork of artworks">
+            <div class="card glass-card" (click)="openArtwork(artwork)">
+              <div class="card-media">
+                <img [src]="artwork.image_url" alt="Obra" />
+                <div class="chip">
+                  <ion-icon name="sparkles-outline"></ion-icon>
+                  <span>Destacada</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-title">{{ artwork.title }}</div>
+                <div class="card-meta">
+                  <span class="dim">{{ artwork.artist }}</span>
+                  <span class="dot">•</span>
+                  <span class="price">${{ artwork.price }}</span>
+                </div>
+
+                <div class="card-cta">
+                  <span class="dim">Ver detalle</span>
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+
+      <!-- ESTABLECIMIENTOS -->
+      <div class="section qz-glass">
+        <div class="section-head">
+          <div class="section-title">Establecimientos</div>
+          <ion-button fill="clear" size="small" (click)="openEstablishmentsList()">
+            Ver todos
+          </ion-button>
+        </div>
+
+        <div class="section-sub">Espacios listos para exhibir obra</div>
+
+        <swiper-container #estSwiper init="false" class="qz-swiper">
+          <swiper-slide *ngFor="let e of establishments">
+            <div class="card glass-card" (click)="openEstablishment(e)">
+              <div class="card-media short">
+                <img [src]="e.image_url" alt="Establecimiento" />
+                <div class="pill">
+                  <ion-icon name="storefront-outline"></ion-icon>
+                  <span>{{ e.category }}</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-title">{{ e.name }}</div>
+                <div class="card-meta">
+                  <span class="dim">Jalisco</span>
+                  <span class="dot">•</span>
+                  <span class="dim">Ver ubicación</span>
+                </div>
+
+                <div class="card-cta">
+                  <span class="dim">Ver detalle</span>
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+
+      </div>
+
+      <!-- Spacer para que no choque con tabbar glass -->
+      <div style="height: 90px;"></div>
+
+    </div>
+  </div>
+</ion-content>

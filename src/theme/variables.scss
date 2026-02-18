@@ -1,2 +1,22 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+:root {
+  --ion-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+
+  /* Base */
+  --qz-bg: rgba(10, 12, 18, 1);
+  --qz-surface: rgba(255, 255, 255, 0.08);
+  --qz-surface-2: rgba(255, 255, 255, 0.12);
+  --qz-border: rgba(255, 255, 255, 0.14);
+  --qz-text: rgba(255, 255, 255, 0.92);
+  --qz-text-dim: rgba(255, 255, 255, 0.68);
+
+  /* Accent (ajústalo a tu Figma si ya tienes un color) */
+  --ion-color-primary: #7c5cff;
+  --ion-color-primary-rgb: 124, 92, 255;
+  --ion-color-primary-contrast: #ffffff;
+
+  /* Background iOS-like */
+  --ion-background-color: var(--qz-bg);
+  --ion-text-color: var(--qz-text);
+}

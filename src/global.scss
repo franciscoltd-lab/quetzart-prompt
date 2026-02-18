@@ -25,6 +25,10 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -35,3 +39,53 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+/* iOS feel: padding + typography */
+ion-content {
+  --background: transparent;
+}
+
+/* Fondo con degradado suave (tipo iOS) */
+.qz-bg {
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(124, 92, 255, 0.35), transparent 55%),
+              radial-gradient(900px 500px at 90% 20%, rgba(0, 216, 255, 0.20), transparent 60%),
+              linear-gradient(180deg, rgba(10,12,18,1) 0%, rgba(10,12,18,1) 60%, rgba(10,12,18,1) 100%);
+  // min-height: 100vh;
+}
+
+/* Glass card */
+.qz-glass {
+  background: var(--qz-surface);
+  border: 1px solid var(--qz-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+}
+
+/* Glass header */
+.qz-header {
+  --background: rgba(20, 22, 30, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Chips/badges */
+.qz-pill {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--qz-text-dim);
+}
+
+/* Inputs con estilo iOS glass */
+.qz-input {
+  --background: rgba(255,255,255,0.06);
+  --border-radius: 16px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --color: var(--qz-text);
+}
