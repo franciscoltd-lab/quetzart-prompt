@@ -78,7 +78,7 @@
 
             </div>
 
-            <ion-grid *ngIf="p.gallery?.length">
+            <ion-grid *ngIf="p.gallery.length">
               <ion-row>
                 <ion-col size="4" *ngFor="let img of p.gallery; let i = index">
                   <div class="thumb">
@@ -91,7 +91,7 @@
               </ion-row>
             </ion-grid>
 
-            <div class="bio" *ngIf="!p.gallery?.length" style="margin-top:8px;">
+            <div class="bio" *ngIf="!p.gallery.length" style="margin-top:8px;">
               Aún no tienes imágenes. Presiona “Añadir”.
             </div>
           </div>
