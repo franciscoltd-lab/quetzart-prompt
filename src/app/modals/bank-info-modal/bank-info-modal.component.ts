@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
+import { BankInfoService, BankInfo } from '../../core/services/bank-info.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -7,15 +9,39 @@ import { ModalController, ToastController } from '@ionic/angular';
   templateUrl: './bank-info-modal.component.html',
 })
 export class BankInfoModalComponent {
-  // Placeholder (luego lo conectamos a backend/config)
-  bank = '(definir)';
-  account = '(definir)';
-  clabe = '(definir)';
+  bank = '';
+  account = '';
+  clabe = '';
+  loading = true;
 
   constructor(
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController
-  ) { }
+    private toastCtrl: ToastController,
+    private bankInfoSvc: BankInfoService
+  ) {}
+
+  async ionViewWillEnter() {
+    await this.load();
+  }
+
+  private async load() {
+    this.loading = true;
+    try {
+      const info: BankInfo = await firstValueFrom(this.bankInfoSvc.getBankInfo());
+      this.bank = info.bank;
+      this.account = info.account;
+      this.clabe = info.clabe;
+    } catch {
+      const t = await this.toastCtrl.create({
+        message: 'No se pudo cargar la info bancaria',
+        duration: 1500,
+        position: 'bottom',
+      });
+      await t.present();
+    } finally {
+      this.loading = false;
+    }
+  }
 
   dismiss() {
     this.modalCtrl.dismiss();
