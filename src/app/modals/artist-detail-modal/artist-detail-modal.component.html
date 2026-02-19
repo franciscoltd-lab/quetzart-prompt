@@ -1,0 +1,51 @@
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>{{ artist?.display_name || 'Artista' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg" style="padding:16px; display:grid; gap:16px;">
+
+    <div *ngIf="loading">Cargando...</div>
+
+    <ng-container *ngIf="!loading && artist">
+
+      <div class="qz-glass" style="padding:16px; text-align:center;">
+        <img
+          [src]="artist.profile_image_url || 'assets/avatar-placeholder.png'"
+          style="width:100px; height:100px; border-radius:20px; object-fit:cover; margin-bottom:10px;" />
+
+        <div style="font-weight:800; font-size:18px;">
+          {{ artist.display_name }}
+        </div>
+
+        <div style="color: var(--qz-text-dim); margin-top:6px;">
+          {{ artist.artistic_style }}
+        </div>
+
+        <div style="margin-top:12px;">
+          {{ artist.bio }}
+        </div>
+      </div>
+
+      <div class="qz-glass" style="padding:16px;">
+        <div style="font-weight:700; margin-bottom:10px;">
+          Obras
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+          <img
+            *ngFor="let g of artist.gallery"
+            [src]="g.image_url"
+            style="width:100%; border-radius:12px; object-fit:cover;" />
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+</ion-content>

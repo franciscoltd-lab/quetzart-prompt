@@ -3,41 +3,45 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class PublicApiService {
-  baseUrl = 'http://127.0.0.1:8000';
+    baseUrl = 'http://127.0.0.1:8000';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-  listArtists(search = '', page = 1, size = 20) {
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
-    if (search) params = params.set('search', search);
-    return this.http.get<any>(`${this.baseUrl}/public/artists`, { params });
-  }
+    listArtists(search = '', page = 1, size = 20) {
+        let params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+        if (search) params = params.set('search', search);
+        return this.http.get<any>(`${this.baseUrl}/public/artists`, { params });
+    }
 
-  listEstablishments(search = '', page = 1, size = 20) {
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
-    if (search) params = params.set('search', search);
-    return this.http.get<any>(`${this.baseUrl}/public/establishments`, { params });
-  }
+    listEstablishments(search = '', page = 1, size = 20) {
+        let params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+        if (search) params = params.set('search', search);
+        return this.http.get<any>(`${this.baseUrl}/public/establishments`, { params });
+    }
 
-  listArtworks(search = '', page = 1, size = 20) {
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
-    if (search) params = params.set('search', search);
-    return this.http.get<any>(`${this.baseUrl}/public/artworks`, { params });
-  }
+    listArtworks(search = '', page = 1, size = 20) {
+        let params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+        if (search) params = params.set('search', search);
+        return this.http.get<any>(`${this.baseUrl}/public/artworks`, { params });
+    }
 
-  home(artistsSize = 10, establishmentsSize = 10, artworksSize = 10) {
-  const params = new HttpParams()
-    .set('artists_size', artistsSize)
-    .set('establishments_size', establishmentsSize)
-    .set('artworks_size', artworksSize);
+    home(artistsSize = 10, establishmentsSize = 10, artworksSize = 10) {
+        const params = new HttpParams()
+            .set('artists_size', artistsSize)
+            .set('establishments_size', establishmentsSize)
+            .set('artworks_size', artworksSize);
 
-  return this.http.get<any>(`${this.baseUrl}/public/home`, { params });
-}
+        return this.http.get<any>(`${this.baseUrl}/public/home`, { params });
+    }
+    getArtist(userId: number) {
+        return this.http.get<any>(`${this.baseUrl}/public/artist/${userId}`);
+    }
+
 
 }
