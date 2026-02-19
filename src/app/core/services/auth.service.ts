@@ -5,15 +5,27 @@ import { ProfileStoreService } from './profile-store.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private token$ = new BehaviorSubject<string | null>(localStorage.getItem('qz_token'));
+  private token$ = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   private role$ = new BehaviorSubject<Role | null>((localStorage.getItem('qz_role') as Role) || null);
 
-  constructor(private profileStore: ProfileStoreService) {}
+  constructor(private profileStore: ProfileStoreService) { }
+
+  login(token: string) {
+    localStorage.setItem('token', token);
+    this.token$.next(token);
+  }
+  logout() {
+    localStorage.removeItem('token');
+    this.token$.next(null);
+  }
+
+  getToken() {
+    return this.token$.value;
+  }
 
   isLoggedIn() {
     return !!this.token$.value;
   }
-
   getRole(): Role | null {
     return this.role$.value;
   }
@@ -23,13 +35,5 @@ export class AuthService {
     this.role$.next(role);
     localStorage.setItem('qz_token', 'mock-token');
     localStorage.setItem('qz_role', role);
-  }
-
-  logout() {
-    this.token$.next(null);
-    this.role$.next(null);
-    localStorage.removeItem('qz_token');
-    localStorage.removeItem('qz_role');
-    this.profileStore.clear();
   }
 }

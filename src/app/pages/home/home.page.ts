@@ -1,12 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
-import { MockDataService } from '../../core/services/mock-data.service';
-
 import { ArtistListModalComponent } from '../../modals/artist-list-modal/artist-list-modal.component';
 import { EstablishmentListModalComponent } from '../../modals/establishment-list-modal/establishment-list-modal.component';
 import { ArtworkDetailModalComponent } from '../../modals/artwork-detail-modal/artwork-detail-modal.component';
 import { EstablishmentDetailModalComponent } from '../../modals/establishment-detail-modal/establishment-detail-modal.component';
+import { PublicApiService } from 'src/app/core/api/public-api.service';
 
 @Component({
   standalone: false,
@@ -14,22 +13,56 @@ import { EstablishmentDetailModalComponent } from '../../modals/establishment-de
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage  {
-  artworks = this.mock.getRandomArtworks();
-  establishments = this.mock.getRandomEstablishments();
+export class HomePage {
+  // ahora vienen del API
+  artworks: any[] = [];          // si aún no hay endpoint, lo dejamos vacío o mock temporal
+  establishments: any[] = [];
 
   @ViewChild('artSwiper', { static: false }) artSwiper?: ElementRef;
   @ViewChild('estSwiper', { static: false }) estSwiper?: ElementRef;
 
   constructor(
     public auth: AuthService,
-    private mock: MockDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private publicApi: PublicApiService
   ) {}
 
   ionViewDidEnter(): void {
     this.initSwipers();
+    this.loadHomeData();
   }
+
+ private loadHomeData() {
+  // Artistas para el swiper “Artistas”
+  this.publicApi.listArtists('', 1, 10).subscribe({
+    next: (r) => {
+      const items = r?.items ?? r ?? [];
+      this.artworks = items.map((a: any) => ({
+        title: a.display_name ?? a.displayName ?? 'Artista',
+        artist: a.artistic_style ?? a.artisticStyle ?? '',
+        price: '', // si no aplica, déjalo vacío
+        image_url: a.profile_image_url ?? a.profileImageUrl ?? 'assets/avatar-placeholder.png',
+        user_id: a.user_id ?? a.userId,
+      }));
+    },
+    error: (err) => console.error('listArtists error', err),
+  });
+
+  // Establecimientos para el swiper “Establecimientos”
+  this.publicApi.listEstablishments('', 1, 10).subscribe({
+    next: (r) => {
+      const items = r?.items ?? r ?? [];
+      this.establishments = items.map((e: any) => ({
+        name: e.display_name ?? e.displayName ?? 'Establecimiento',
+        category: e.category ?? '',
+        image_url: e.profile_image_url ?? e.profileImageUrl ?? 'assets/avatar-placeholder.png',
+        user_id: e.user_id ?? e.userId,
+      }));
+    },
+    error: (err) => console.error('listEstablishments error', err),
+  });
+}
+
 
   private initSwipers() {
     const art = this.artSwiper?.nativeElement;
@@ -57,6 +90,7 @@ export class HomePage  {
       est.initialize();
     }
   }
+
   async openArtistsList() {
     const m = await this.modalCtrl.create({
       component: ArtistListModalComponent,
@@ -76,6 +110,9 @@ export class HomePage  {
   }
 
   async openArtwork(artwork: any) {
+    // ahora “artwork” realmente es “artist card”
+    // lo correcto del plan: abrir PERFIL público del artista
+    // por ahora lo mandas a tu modal de detalle (luego lo convertimos a perfil público real)
     const m = await this.modalCtrl.create({
       component: ArtworkDetailModalComponent,
       componentProps: { artwork },

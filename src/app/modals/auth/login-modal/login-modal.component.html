@@ -19,8 +19,14 @@
           <ion-input label="Contraseña" labelPlacement="stacked" type="password" [(ngModel)]="password"></ion-input>
         </ion-item>
 
-        <ion-button expand="block" (click)="loginAsArtist()">Entrar como Artista (mock)</ion-button>
-        <ion-button expand="block" fill="outline" (click)="loginAsEstablishment()">Entrar como Establecimiento (mock)</ion-button>
+        <ion-button expand="block" (click)="login()" [disabled]="loading || !email || !password">
+          {{ loading ? 'Entrando...' : 'Iniciar sesión' }}
+        </ion-button>
+
+        <ion-button expand="block" fill="clear" (click)="forgotPassword()">
+          ¿Olvidaste tu contraseña?
+        </ion-button>
+
       </div>
     </div>
   </div>

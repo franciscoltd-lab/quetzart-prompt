@@ -23,6 +23,18 @@
       <form [formGroup]="form" class="qz-glass block">
         <div class="block-title">Datos del establecimiento</div>
 
+        <ion-item class="qz-glass" lines="none">
+          <ion-input label="Email" labelPlacement="stacked" type="email" formControlName="email">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="qz-glass" lines="none">
+          <ion-input label="Contraseña" labelPlacement="stacked" type="password" maxlength="64"
+            formControlName="password">
+          </ion-input>
+        </ion-item>
+
+
         <ion-item class="item" lines="none">
           <ion-input label="Nombre" labelPlacement="stacked" formControlName="name"></ion-input>
         </ion-item>
@@ -39,11 +51,7 @@
         <div class="err" *ngIf="f.number.touched && f.number.invalid">Número requerido.</div>
 
         <ion-item class="item" lines="none">
-          <ion-input
-            label="CP"
-            labelPlacement="stacked"
-            formControlName="postalCode"
-            inputmode="numeric"
+          <ion-input label="CP" labelPlacement="stacked" formControlName="postalCode" inputmode="numeric"
             (ionInput)="onPostalCodeChange()">
           </ion-input>
         </ion-item>
@@ -55,7 +63,8 @@
         </div>
 
         <ion-item class="item" lines="none">
-          <ion-input label="Categoría (restaurante, cafetería...)" labelPlacement="stacked" formControlName="category"></ion-input>
+          <ion-input label="Categoría (restaurante, cafetería...)" labelPlacement="stacked"
+            formControlName="category"></ion-input>
         </ion-item>
         <div class="err" *ngIf="f.category.touched && f.category.invalid">Categoría requerida.</div>
       </form>

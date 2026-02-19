@@ -10,7 +10,14 @@ const routes: Routes = [
       { path: 'home', loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule) },
       { path: 'map', loadChildren: () => import('../pages/map/map.module').then(m => m.MapPageModule) },
       { path: 'profile', loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfilePageModule) },
-      // Mensajes existe después, pero NO lo mostramos en tab-bar (queda para fase futura)
+      // {
+      //   path: 'artist/:id',
+      //   loadChildren: () => import('../pages/public-artist/public-artist.module').then(m => m.PublicArtistModule)
+      // },
+      // {
+      //   path: 'establishment/:id',
+      //   loadChildren: () => import('../pages/public-establishment/public-establishment.module').then(m => m.PublicEstablishmentModule)
+      // },
       { path: '', redirectTo: '/tabs/home', pathMatch: 'full' },
     ],
   },
@@ -20,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }
