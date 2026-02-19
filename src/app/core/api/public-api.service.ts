@@ -30,4 +30,14 @@ export class PublicApiService {
     if (search) params = params.set('search', search);
     return this.http.get<any>(`${this.baseUrl}/public/artworks`, { params });
   }
+
+  home(artistsSize = 10, establishmentsSize = 10, artworksSize = 10) {
+  const params = new HttpParams()
+    .set('artists_size', artistsSize)
+    .set('establishments_size', establishmentsSize)
+    .set('artworks_size', artworksSize);
+
+  return this.http.get<any>(`${this.baseUrl}/public/home`, { params });
+}
+
 }
