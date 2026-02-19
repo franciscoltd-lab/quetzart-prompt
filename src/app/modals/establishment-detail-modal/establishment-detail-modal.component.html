@@ -1,3 +1,42 @@
-<p>
-  establishment-detail-modal works!
-</p>
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>{{ est?.display_name || 'Establecimiento' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg" style="padding:16px; display:grid; gap:16px;">
+
+    <div *ngIf="loading">Cargando...</div>
+
+    <ng-container *ngIf="!loading && est">
+
+      <div class="qz-glass" style="padding:16px;">
+        <img
+          [src]="est.profile_image_url || 'assets/avatar-placeholder.png'"
+          style="width:100%; height:160px; border-radius:16px; object-fit:cover; margin-bottom:12px;" />
+
+        <div style="font-weight:800; font-size:18px;">
+          {{ est.display_name }}
+        </div>
+
+        <div style="margin-top:8px;">
+          <span class="qz-pill">{{ est.category }}</span>
+        </div>
+
+        <div style="margin-top:12px; color: var(--qz-text-dim);">
+          {{ est.street }} {{ est.number }},
+          {{ est.colony || '' }} {{ est.municipality || '' }},
+          CP {{ est.postal_code }}
+        </div>
+      </div>
+
+      <!-- luego aquí metemos: botón “Solicitar exhibición / Contactar” (requiere login) -->
+
+    </ng-container>
+
+  </div>
+</ion-content>

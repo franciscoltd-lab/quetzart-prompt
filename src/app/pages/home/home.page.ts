@@ -25,43 +25,43 @@ export class HomePage {
     public auth: AuthService,
     private modalCtrl: ModalController,
     private publicApi: PublicApiService
-  ) {}
+  ) { }
 
   ionViewDidEnter(): void {
     this.initSwipers();
     this.loadHomeData();
   }
 
- private loadHomeData() {
-  // Artistas para el swiper “Artistas”
-  this.publicApi.listArtists('', 1, 10).subscribe({
-    next: (r) => {
-      const items = r?.items ?? r ?? [];
-      this.artworks = items.map((a: any) => ({
-        title: a.display_name ?? a.displayName ?? 'Artista',
-        artist: a.artistic_style ?? a.artisticStyle ?? '',
-        price: '', // si no aplica, déjalo vacío
-        image_url: a.profile_image_url ?? a.profileImageUrl ?? 'assets/avatar-placeholder.png',
-        user_id: a.user_id ?? a.userId,
-      }));
-    },
-    error: (err) => console.error('listArtists error', err),
-  });
+  private loadHomeData() {
+    // Artistas para el swiper “Artistas”
+    this.publicApi.listArtists('', 1, 10).subscribe({
+      next: (r) => {
+        const items = r?.items ?? r ?? [];
+        this.artworks = items.map((a: any) => ({
+          title: a.display_name ?? a.displayName ?? 'Artista',
+          artist: a.artistic_style ?? a.artisticStyle ?? '',
+          price: '', // si no aplica, déjalo vacío
+          image_url: a.profile_image_url ?? a.profileImageUrl ?? 'assets/avatar-placeholder.png',
+          user_id: a.user_id ?? a.userId,
+        }));
+      },
+      error: (err) => console.error('listArtists error', err),
+    });
 
-  // Establecimientos para el swiper “Establecimientos”
-  this.publicApi.listEstablishments('', 1, 10).subscribe({
-    next: (r) => {
-      const items = r?.items ?? r ?? [];
-      this.establishments = items.map((e: any) => ({
-        name: e.display_name ?? e.displayName ?? 'Establecimiento',
-        category: e.category ?? '',
-        image_url: e.profile_image_url ?? e.profileImageUrl ?? 'assets/avatar-placeholder.png',
-        user_id: e.user_id ?? e.userId,
-      }));
-    },
-    error: (err) => console.error('listEstablishments error', err),
-  });
-}
+    // Establecimientos para el swiper “Establecimientos”
+    this.publicApi.listEstablishments('', 1, 10).subscribe({
+      next: (r) => {
+        const items = r?.items ?? r ?? [];
+        this.establishments = items.map((e: any) => ({
+          name: e.display_name ?? e.displayName ?? 'Establecimiento',
+          category: e.category ?? '',
+          image_url: e.profile_image_url ?? e.profileImageUrl ?? 'assets/avatar-placeholder.png',
+          user_id: e.user_id ?? e.userId,
+        }));
+      },
+      error: (err) => console.error('listEstablishments error', err),
+    });
+  }
 
 
   private initSwipers() {
@@ -125,9 +125,9 @@ export class HomePage {
   async openEstablishment(est: any) {
     const m = await this.modalCtrl.create({
       component: EstablishmentDetailModalComponent,
-      componentProps: { est },
-      breakpoints: [0, 0.6, 0.95],
-      initialBreakpoint: 0.6,
+      componentProps: { userId: est.user_id }, // <-- NO est completo
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
     });
     await m.present();
   }

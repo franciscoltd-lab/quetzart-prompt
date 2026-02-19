@@ -43,5 +43,8 @@ export class PublicApiService {
         return this.http.get<any>(`${this.baseUrl}/public/artist/${userId}`);
     }
 
+    getEstablishment(userId: number) {
+        return this.http.get<any>(`${this.baseUrl}/public/establishment/${userId}`);
+    }
 
 }

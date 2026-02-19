@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { PublicApiService } from 'src/app/core/api/public-api.service';
 
 @Component({
   standalone: false,
@@ -6,10 +8,25 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './establishment-detail-modal.component.html',
   styleUrls: ['./establishment-detail-modal.component.scss'],
 })
-export class EstablishmentDetailModalComponent  implements OnInit {
+export class EstablishmentDetailModalComponent implements OnInit {
 
-  constructor() { }
+  @Input() userId!: number;
 
-  ngOnInit() {}
+  est: any;
+  loading = true;
 
+  constructor(
+    private modalCtrl: ModalController,
+    private publicApi: PublicApiService,
+  ) {}
+
+  ngOnInit() {
+    this.publicApi.getEstablishment(this.userId).subscribe({
+      next: (res) => this.est = res,
+      error: (e) => console.error(e),
+      complete: () => this.loading = false,
+    });
+  }
+
+  dismiss() { this.modalCtrl.dismiss(); }
 }
