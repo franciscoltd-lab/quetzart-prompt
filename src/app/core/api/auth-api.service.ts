@@ -46,5 +46,20 @@ export class AuthApiService {
         return this.http.get<any>(`${this.baseUrl}/public/establishments/${id}`);
     }
 
+    updateMe(payload: any) {
+        return this.http.patch<any>(`${this.baseUrl}/profile/me`, payload);
+    }
+
+    setProfileImage(profile_image_base64: string) {
+        return this.http.post<any>(`${this.baseUrl}/profile/me/profile-image`, { profile_image_base64 });
+    }
+
+    addGallery(gallery_base64: string[]) {
+        return this.http.post<any>(`${this.baseUrl}/profile/me/gallery`, { gallery_base64 });
+    }
+
+    deleteGalleryItem(galleryId: number) {
+        return this.http.delete<any>(`${this.baseUrl}/profile/me/gallery/${galleryId}`);
+    }
 
 }

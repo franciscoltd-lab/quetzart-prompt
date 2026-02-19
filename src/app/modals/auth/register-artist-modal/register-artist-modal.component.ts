@@ -106,7 +106,11 @@ export class RegisterArtistModalComponent {
               inferredColony: p.colony ?? '',
               inferredMunicipality: p.municipality ?? '',
 
-              gallery: (p.gallery || []).map((g: any) => g.image_url ?? g.imageUrl),
+              gallery: (p.gallery || []).map((g: any) => ({
+                id: g.id,
+                url: g.image_url ?? g.imageUrl,
+              })),
+
             };
 
             this.profileStore.setProfile(mapped);

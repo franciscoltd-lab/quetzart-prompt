@@ -55,16 +55,15 @@
 
               <div class="bio" *ngIf="p.role === 'artist'">
                 {{ p.bio || 'Sin descripción' }}
+              </div>
 
-                <ion-button expand="block" fill="outline" (click)="editCategoryOrStyle(p)">
+               <ion-button expand="block" fill="outline" (click)="editCategoryOrStyle(p)">
                   Editar {{ p.role === 'artist' ? 'corriente artística' : 'categoría' }}
                 </ion-button>
 
                 <ion-button expand="block" fill="outline" *ngIf="p.role === 'artist'" (click)="editBio(p)">
                   Editar descripción
                 </ion-button>
-
-              </div>
             </div>
           </div>
 
@@ -82,7 +81,7 @@
               <ion-row>
                 <ion-col size="4" *ngFor="let img of p.gallery; let i = index">
                   <div class="thumb">
-                    <img [src]="img" alt="img" />
+                    <img [src]="img.url" alt="img" />
                     <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i)">
                       <ion-icon name="close-circle"></ion-icon>
                     </ion-button>

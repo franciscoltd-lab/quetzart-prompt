@@ -12,33 +12,31 @@
     <div class="wrap">
 
       <div class="qz-glass block">
-        <div class="block-title">{{ label }}</div>
 
-        <ion-item class="item" lines="none" *ngIf="!multiline">
-          <ion-input
-            [placeholder]="placeholder"
-            labelPlacement="stacked"
-            formControlName="text"
-            [value]="form.controls.text.value"
-            (ionInput)="form.controls.text.setValue(($any($event).detail.value || ''))">
-          </ion-input>
-        </ion-item>
+        <form [formGroup]="form">
 
-        <ion-item class="item" lines="none" *ngIf="multiline">
-          <ion-textarea
-            [placeholder]="placeholder"
-            autoGrow="true"
-            formControlName="text">
-          </ion-textarea>
-        </ion-item>
+          <div class="block-title">{{ label }}</div>
 
-        <div class="err" *ngIf="form.controls.text.touched && form.controls.text.invalid">
-          Escribe mínimo {{ minLength }} caracteres.
-        </div>
+          <ion-item class="item" lines="none" *ngIf="!multiline">
+            <ion-input [placeholder]="placeholder" labelPlacement="stacked" formControlName="text">
+            </ion-input>
+          </ion-item>
 
-        <ion-button expand="block" (click)="save()" [disabled]="form.invalid">
-          Guardar
-        </ion-button>
+          <ion-item class="item" lines="none" *ngIf="multiline">
+            <ion-textarea [placeholder]="placeholder" autoGrow="true" formControlName="text">
+            </ion-textarea>
+          </ion-item>
+
+          <div class="err" *ngIf="form.controls.text.touched && form.controls.text.invalid">
+            Escribe mínimo {{ minLength }} caracteres.
+          </div>
+
+          <ion-button expand="block" (click)="save()" [disabled]="form.invalid">
+            Guardar
+          </ion-button>
+
+        </form>
+
       </div>
 
       <div style="height: 30px;"></div>

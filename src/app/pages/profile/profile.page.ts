@@ -9,6 +9,7 @@ import { AccountTypeModalComponent } from '../../modals/auth/account-type-modal/
 import { EditTextModalComponent } from '../../modals/common/edit-text-modal/edit-text-modal.component';
 
 import { PhotoService } from '../../core/services/photo.service';
+import { AuthApiService } from 'src/app/core/api/auth-api.service';
 
 @Component({
   standalone: false,
@@ -25,7 +26,39 @@ export class ProfilePage {
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private photo: PhotoService,
-  ) { }
+    private authApi: AuthApiService,
+  ) {}
+
+  private reloadMe() {
+    this.authApi.me().subscribe({
+      next: (p: any) => {
+        const mapped: AppProfile = {
+          role: p.role,
+          displayName: p.display_name ?? p.displayName,
+          profileImage: p.profile_image_url ?? p.profileImage ?? null,
+          lastNameChangeISO: p.last_name_change_at ?? null,
+
+          artisticStyle: p.artistic_style ?? null,
+          bio: p.bio ?? null,
+
+          category: p.category ?? null,
+          street: p.street ?? '',
+          number: p.number ?? '',
+          postalCode: p.postal_code ?? '',
+          inferredColony: p.colony ?? '',
+          inferredMunicipality: p.municipality ?? '',
+
+          gallery: (p.gallery || []).map((g: any) => ({
+            id: g.id,
+            url: g.image_url ?? g.imageUrl,
+          })),
+        };
+
+        this.profileStore.setProfile(mapped);
+      },
+      error: (e) => console.error('me() error', e),
+    });
+  }
 
   async openLogin() {
     const m = await this.modalCtrl.create({
@@ -49,7 +82,6 @@ export class ProfilePage {
     this.auth.logout();
   }
 
-  // helpers UI
   roleLabel(p: AppProfile) {
     return p.role === 'artist' ? 'Artista' : 'Establecimiento';
   }
@@ -59,7 +91,6 @@ export class ProfilePage {
   }
 
   async editName(p: AppProfile) {
-    // regla 30 días
     if (p.lastNameChangeISO) {
       const last = new Date(p.lastNameChangeISO).getTime();
       const diffDays = Math.floor((Date.now() - last) / (1000 * 60 * 60 * 24));
@@ -91,29 +122,26 @@ export class ProfilePage {
     const { data } = await m.onWillDismiss();
     if (!data?.text) return;
 
-    this.profileStore.patchProfile({
-      displayName: data.text,
-      lastNameChangeISO: new Date().toISOString(),
+    this.authApi.updateMe({ display_name: data.text }).subscribe({
+      next: async () => {
+        this.reloadMe();
+        const t = await this.toastCtrl.create({
+          message: 'Nombre actualizado.',
+          duration: 1000,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async (e) => {
+        console.error(e);
+        const t = await this.toastCtrl.create({
+          message: 'No se pudo actualizar el nombre.',
+          duration: 1400,
+          position: 'bottom',
+        });
+        await t.present();
+      },
     });
-
-    const t = await this.toastCtrl.create({
-      message: 'Nombre actualizado.',
-      duration: 1000,
-      position: 'bottom',
-    });
-    await t.present();
-  }
-
-
-  async addPhoto(p: AppProfile) {
-    const img = 'https://picsum.photos/id/1040/600/600';
-    this.profileStore.patchProfile({ gallery: [img, ...(p.gallery || [])] });
-  }
-
-  removePhoto(p: AppProfile, idx: number) {
-    const next = [...(p.gallery || [])];
-    next.splice(idx, 1);
-    this.profileStore.patchProfile({ gallery: next });
   }
 
   async editBio(p: AppProfile) {
@@ -137,14 +165,26 @@ export class ProfilePage {
     const { data } = await m.onWillDismiss();
     if (!data?.text) return;
 
-    this.profileStore.patchProfile({ bio: data.text });
-
-    const t = await this.toastCtrl.create({
-      message: 'Descripción actualizada.',
-      duration: 1000,
-      position: 'bottom',
+    this.authApi.updateMe({ bio: data.text }).subscribe({
+      next: async () => {
+        this.reloadMe();
+        const t = await this.toastCtrl.create({
+          message: 'Descripción actualizada.',
+          duration: 1000,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async (e) => {
+        console.error(e);
+        const t = await this.toastCtrl.create({
+          message: 'No se pudo actualizar la descripción.',
+          duration: 1400,
+          position: 'bottom',
+        });
+        await t.present();
+      },
     });
-    await t.present();
   }
 
   async editCategoryOrStyle(p: AppProfile) {
@@ -168,27 +208,57 @@ export class ProfilePage {
     const { data } = await m.onWillDismiss();
     if (!data?.text) return;
 
-    if (isArtist) this.profileStore.patchProfile({ artisticStyle: data.text });
-    else this.profileStore.patchProfile({ category: data.text });
+    const payload = isArtist ? { artistic_style: data.text } : { category: data.text };
 
-    const t = await this.toastCtrl.create({
-      message: 'Actualizado.',
-      duration: 900,
-      position: 'bottom',
+    this.authApi.updateMe(payload).subscribe({
+      next: async () => {
+        this.reloadMe();
+        const t = await this.toastCtrl.create({
+          message: 'Actualizado.',
+          duration: 900,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async (e) => {
+        console.error(e);
+        const t = await this.toastCtrl.create({
+          message: 'No se pudo actualizar.',
+          duration: 1400,
+          position: 'bottom',
+        });
+        await t.present();
+      },
     });
-    await t.present();
   }
 
   async changeProfileImage(p: AppProfile) {
     const dataUrl = await this.photo.pickSingleBase64();
     if (!dataUrl) return;
-    this.profileStore.patchProfile({ profileImage: dataUrl });
+
+    this.authApi.setProfileImage(dataUrl).subscribe({
+      next: () => this.reloadMe(),
+      error: (e) => console.error('setProfileImage error', e),
+    });
   }
 
   async addPhotos(p: AppProfile) {
     const imgs = await this.photo.pickMultipleBase64(10);
     if (!imgs.length) return;
-    this.profileStore.patchProfile({ gallery: [...imgs, ...(p.gallery || [])] });
+
+    this.authApi.addGallery(imgs).subscribe({
+      next: () => this.reloadMe(),
+      error: (e) => console.error('addGallery error', e),
+    });
   }
 
+  removePhoto(p: AppProfile, idx: number) {
+    const item = p.gallery[idx];
+    if (!item?.id) return;
+
+    this.authApi.deleteGalleryItem(item.id).subscribe({
+      next: () => this.reloadMe(),
+      error: (e) => console.error('deleteGalleryItem error', e),
+    });
+  }
 }

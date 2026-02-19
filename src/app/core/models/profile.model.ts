@@ -1,27 +1,22 @@
 export type Role = 'artist' | 'establishment';
 
-export interface AppProfile {
-  role: Role;
+export type GalleryItem = { id: number; url: string };
 
-  // UI
+export interface AppProfile {
+  role: 'artist' | 'establishment';
   displayName: string;
   profileImage: string | null;
+  lastNameChangeISO: string | null;
 
-  // Artista
-  bio?: string;
-  artisticStyle?: string;
+  artisticStyle?: string | null;
+  bio?: string | null;
 
-  // Establecimiento
-  category?: string;
+  category?: string | null;
   street?: string;
   number?: string;
   postalCode?: string;
   inferredColony?: string;
   inferredMunicipality?: string;
 
-  // Galería / portafolio
-  gallery: string[];
-
-  // Regla: 1 cambio cada 30 días
-  lastNameChangeISO: string | null;
+  gallery: GalleryItem[]; // 👈 antes era string[]
 }
