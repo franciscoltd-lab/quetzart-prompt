@@ -83,6 +83,7 @@ export class HomePage {
       Object.assign(est, {
         slidesPerView: 1.05,
         spaceBetween: 14,
+        pagination: { clickable: true },
         speed: 450,
         observer: true,
         observeParents: true,
