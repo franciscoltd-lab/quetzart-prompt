@@ -68,7 +68,7 @@ export class HomePage {
     const art = this.artSwiper?.nativeElement;
     if (art && !art.swiper) {
       Object.assign(art, {
-        slidesPerView: 1.15,
+        slidesPerView: 1.05,
         spaceBetween: 14,
         pagination: { clickable: true },
         speed: 450,

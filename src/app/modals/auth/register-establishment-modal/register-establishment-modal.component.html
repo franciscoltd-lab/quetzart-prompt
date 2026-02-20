@@ -28,21 +28,41 @@
         <div class="block-title">Datos del establecimiento</div>
 
         <!-- EMAIL -->
-        <ion-item class="qz-glass" lines="none">
-          <ion-input label="Email" labelPlacement="stacked" type="email" formControlName="email">
+        <ion-item class="item" lines="none">
+          <ion-input
+            label="Email"
+            labelPlacement="stacked"
+            type="email"
+            formControlName="email">
           </ion-input>
         </ion-item>
+        <div class="err" *ngIf="f.email.touched && f.email.invalid">
+          Email inválido.
+        </div>
 
         <!-- PASSWORD -->
-        <ion-item class="qz-glass" lines="none">
-          <ion-input label="Contraseña" labelPlacement="stacked" type="password" maxlength="64"
+        <ion-item class="item" lines="none">
+          <ion-input
+            label="Contraseña"
+            labelPlacement="stacked"
+            type="password"
+            maxlength="64"
             formControlName="password">
           </ion-input>
         </ion-item>
+        <div class="hint">
+          Mín. 8 caracteres, 1 mayúscula, 1 número y 1 caracter especial.
+        </div>
+        <div class="err" *ngIf="f.password.touched && f.password.invalid">
+          Contraseña no cumple.
+        </div>
 
         <!-- NOMBRE -->
         <ion-item class="item" lines="none">
-          <ion-input label="Nombre" labelPlacement="stacked" formControlName="name">
+          <ion-input
+            label="Nombre"
+            labelPlacement="stacked"
+            formControlName="name">
           </ion-input>
         </ion-item>
         <div class="err" *ngIf="f.name.touched && f.name.invalid">
@@ -51,7 +71,10 @@
 
         <!-- CALLE -->
         <ion-item class="item" lines="none">
-          <ion-input label="Calle" labelPlacement="stacked" formControlName="street">
+          <ion-input
+            label="Calle"
+            labelPlacement="stacked"
+            formControlName="street">
           </ion-input>
         </ion-item>
         <div class="err" *ngIf="f.street.touched && f.street.invalid">
@@ -60,7 +83,10 @@
 
         <!-- NÚMERO -->
         <ion-item class="item" lines="none">
-          <ion-input label="Número" labelPlacement="stacked" formControlName="number">
+          <ion-input
+            label="Número"
+            labelPlacement="stacked"
+            formControlName="number">
           </ion-input>
         </ion-item>
         <div class="err" *ngIf="f.number.touched && f.number.invalid">
@@ -68,14 +94,20 @@
         </div>
 
         <!-- CP -->
-        <!-- CP -->
         <ion-item class="item" lines="none">
-          <ion-input label="CP" labelPlacement="stacked" formControlName="postalCode" inputmode="numeric"
+          <ion-input
+            label="CP"
+            labelPlacement="stacked"
+            formControlName="postalCode"
+            inputmode="numeric"
             (ionInput)="onPostalCodeChange()">
           </ion-input>
 
-          <!-- spinner pequeñito al lado derecho -->
-          <ion-spinner *ngIf="loadingCp" name="crescent" slot="end" class="cp-spinner">
+          <ion-spinner
+            *ngIf="loadingCp"
+            name="crescent"
+            slot="end"
+            class="cp-spinner">
           </ion-spinner>
         </ion-item>
         <div class="err" *ngIf="f.postalCode.touched && f.postalCode.invalid">
@@ -92,15 +124,16 @@
             Zona detectada
           </div>
 
-          <!-- SELECT DE COLONIA (estilo más flat) -->
+          <!-- SELECT DE COLONIA -->
           <ion-item lines="none" class="mini-select" *ngIf="colonies.length > 0">
-            <ion-item lines="none" class="mini-select" *ngIf="colonies.length > 0">
-              <ion-select placeholder="Selecciona colonia" formControlName="colony" interface="popover">
-                <ion-select-option *ngFor="let c of colonies" [value]="c">
-                  {{ c }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
+            <ion-select
+              placeholder="Selecciona colonia"
+              formControlName="colony"
+              interface="popover">
+              <ion-select-option *ngFor="let c of colonies" [value]="c">
+                {{ c }}
+              </ion-select-option>
+            </ion-select>
           </ion-item>
 
           <div class="mini-row" *ngIf="inferredMunicipality">
@@ -116,7 +149,10 @@
 
         <!-- CATEGORÍA -->
         <ion-item class="item" lines="none">
-          <ion-input label="Categoría (restaurante, cafetería...)" labelPlacement="stacked" formControlName="category">
+          <ion-input
+            label="Categoría (restaurante, cafetería...)"
+            labelPlacement="stacked"
+            formControlName="category">
           </ion-input>
         </ion-item>
         <div class="err" *ngIf="f.category.touched && f.category.invalid">
@@ -124,7 +160,11 @@
         </div>
       </form>
 
-      <ion-button expand="block" class="cta" [disabled]="form.invalid" (click)="submit()">
+      <ion-button
+        expand="block"
+        class="cta"
+        [disabled]="form.invalid"
+        (click)="submit()">
         Registrar
       </ion-button>
 

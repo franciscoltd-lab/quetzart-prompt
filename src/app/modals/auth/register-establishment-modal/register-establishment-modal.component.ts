@@ -13,6 +13,9 @@ import {
   PostalCodeInfo,
 } from 'src/app/core/api/geo-api.service';
 
+// Puedes mover esto a un archivo compartido si quieres reutilizarlo
+const STRONG_PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
 @Component({
   standalone: false,
   selector: 'app-register-establishment-modal',
@@ -35,13 +38,17 @@ export class RegisterEstablishmentModalComponent {
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
-      [Validators.required, Validators.minLength(8), Validators.maxLength(64)],
+      [
+        Validators.required,
+        Validators.maxLength(64),
+        Validators.pattern(STRONG_PASSWORD_REGEX), // 👈 misma fuerza que artista
+      ],
     ],
     street: ['', [Validators.required]],
     number: ['', [Validators.required]],
     postalCode: ['', [Validators.required, Validators.pattern(/^\d{5}$/)]],
     category: ['', [Validators.required]],
-    colony: [''],  // 👈 nuevo
+    colony: [''],
   });
 
   constructor(
@@ -53,7 +60,7 @@ export class RegisterEstablishmentModalComponent {
     private photo: PhotoService,
     private authApi: AuthApiService,
     private geoApi: GeoApiService
-  ) { }
+  ) {}
 
   dismiss() {
     this.modalCtrl.dismiss();
@@ -124,8 +131,8 @@ export class RegisterEstablishmentModalComponent {
       street: String(v.street || '').trim(),
       number: String(v.number || '').trim(),
       postal_code: String(v.postalCode || '').trim(),
-      colony: v.colony || null,                          // 👈 de form
-      municipality: this.inferredMunicipality || null,   // sigue viniendo del CP
+      colony: v.colony || null,
+      municipality: this.inferredMunicipality || null,
       profile_image_base64: this.profileImagePreview,
     };
 
