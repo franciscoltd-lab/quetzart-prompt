@@ -8,7 +8,7 @@ export class PhotoService {
     try {
       const photo = await Camera.getPhoto({
         quality: 85,
-        allowEditing: true,
+        allowEditing: false,
         source: CameraSource.Photos,
         resultType: CameraResultType.Base64,
       });
