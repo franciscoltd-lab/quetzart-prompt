@@ -28,27 +28,57 @@
   height: 64px;
   border-radius: 18px;
   object-fit: cover;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
 }
 
+/* INPUTS PRINCIPALES */
 .item {
-  --background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.10);
+  --background: rgba(255, 255, 255, 0.06);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --min-height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 16px;
   margin-top: 6px;
 }
 
+/* BLOQUE DE ZONA DETECTADA */
 .mini {
-  padding: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+  display: grid;
+  gap: 6px;
+}
+
+.mini-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ion-item del select dentro del mini, más sutil */
+.mini-select {
+  --background: rgba(0, 0, 0, 0.18);
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --min-height: 40px;
+  margin-top: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .mini-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 13px;
-  color: rgba(255,255,255,0.80);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .err {
@@ -58,7 +88,16 @@
 }
 
 .dim {
-  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.cta { margin-top: 4px; }
+/* spinner chiquito al lado del input CP */
+.cp-spinner {
+  width: 18px;
+  height: 18px;
+}
+
+.cta {
+  margin-top: 4px;
+}

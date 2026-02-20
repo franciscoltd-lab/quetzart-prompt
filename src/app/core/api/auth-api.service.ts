@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 
 interface LoginResponse {
     access_token: string;
@@ -9,7 +10,7 @@ interface LoginResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthApiService {
-    private baseUrl = 'http://127.0.0.1:8000';
+    private baseUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 
