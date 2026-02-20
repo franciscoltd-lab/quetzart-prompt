@@ -48,7 +48,9 @@
 
         <swiper-container #artSwiper init="false" class="qz-swiper">
           <swiper-slide *ngFor="let artwork of artworks">
-            <div class="card glass-card" (click)="openArtwork(artwork)">
+            <!-- TODO: develop artworks -->
+            <!-- <div class="card glass-card" (click)="openArtwork(artwork)"> -->
+            <div class="card glass-card">
               <div class="card-media">
                 <img [src]="artwork.image_url" alt="Obra" />
                 <div class="chip">
