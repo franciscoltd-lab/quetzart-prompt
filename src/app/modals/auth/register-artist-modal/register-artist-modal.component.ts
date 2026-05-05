@@ -8,7 +8,7 @@ import { PhotoService } from 'src/app/core/services/photo.service';
 
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
 
-const CURP_REGEX = /^([A-Z][AEIOUX][A-Z]{2}\d{6}[HM][A-Z]{5}\d{2})$/;
+const CURP_REGEX = ^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS)[A-Z]{3}[A-Z0-9]\d$;
 const STRONG_PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
 @Component({
