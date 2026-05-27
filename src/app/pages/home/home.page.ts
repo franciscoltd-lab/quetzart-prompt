@@ -5,6 +5,7 @@ import { ArtistListModalComponent } from '../../modals/artist-list-modal/artist-
 import { EstablishmentListModalComponent } from '../../modals/establishment-list-modal/establishment-list-modal.component';
 import { ArtistDetailModalComponent } from '../../modals/artist-detail-modal/artist-detail-modal.component';
 import { EstablishmentDetailModalComponent } from '../../modals/establishment-detail-modal/establishment-detail-modal.component';
+import { ArtworkDetailModalComponent } from '../../modals/artwork-detail-modal/artwork-detail-modal.component';
 import { PublicApiService } from 'src/app/core/api/public-api.service';
 import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
@@ -15,8 +16,18 @@ import { normalizeImageUrl } from 'src/app/core/utils/image-url';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  artworks: any[] = [];
+  artists: any[] = [];
+  featuredArtworks: any[] = [];
+  activeFeaturedIndex = 0;
   establishments: any[] = [];
+  private dragState?: {
+    el: HTMLElement;
+    pointerId: number;
+    startX: number;
+    scrollLeft: number;
+    dragged: boolean;
+  };
+  private suppressNextClick = false;
 
   constructor(
     public auth: AuthService,
@@ -32,7 +43,7 @@ export class HomePage {
     this.publicApi.listArtists('', 1, 12).subscribe({
       next: (r) => {
         const items = r?.items ?? r ?? [];
-        this.artworks = items.map((a: any) => ({
+        this.artists = items.map((a: any) => ({
           title: a.display_name ?? a.displayName ?? 'Artista',
           artist: a.artistic_style ?? a.artisticStyle ?? '',
           image_url: normalizeImageUrl(a.profile_image_url ?? a.profileImageUrl) || 'assets/avatar-placeholder.png',
@@ -54,10 +65,86 @@ export class HomePage {
       },
       error: (err) => console.error('listEstablishments error', err),
     });
+
+    this.publicApi.listArtworks('', 1, 20).subscribe({
+      next: (r) => {
+        const items = r?.items ?? r ?? [];
+        this.featuredArtworks = this.shuffle(items).slice(0, 5).map((a: any) => ({
+          id: a.id,
+          title: a.title ?? a.nombre ?? 'Obra',
+          artist: a.artist ?? a.artist_name ?? a.artistName ?? a.display_name ?? '',
+          description: a.description ?? a.descripcion ?? '',
+          price: a.price ?? a.precio ?? null,
+          image_url: normalizeImageUrl(a.image_url ?? a.imageUrl ?? a.photo_url ?? a.photoUrl) || 'assets/avatar-placeholder.png',
+        }));
+        this.activeFeaturedIndex = 0;
+      },
+      error: (err) => console.error('listArtworks error', err),
+    });
   }
 
   trackByUserId(_: number, item: any) {
     return item.user_id ?? item.id ?? item.name ?? item.title;
+  }
+
+  trackById(_: number, item: any) {
+    return item.id ?? item.image_url ?? item.title;
+  }
+
+  syncFeaturedIndex(event: Event) {
+    const el = event.target as HTMLElement;
+    const index = Math.round(el.scrollLeft / el.clientWidth);
+    this.activeFeaturedIndex = Math.max(0, Math.min(index, this.featuredArtworks.length - 1));
+  }
+
+  startCarouselDrag(event: PointerEvent) {
+    const el = event.currentTarget as HTMLElement;
+    this.dragState = {
+      el,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      scrollLeft: el.scrollLeft,
+      dragged: false,
+    };
+    el.setPointerCapture?.(event.pointerId);
+  }
+
+  moveCarouselDrag(event: PointerEvent) {
+    if (!this.dragState || this.dragState.pointerId !== event.pointerId) return;
+
+    const delta = event.clientX - this.dragState.startX;
+    if (Math.abs(delta) > 4) {
+      this.dragState.dragged = true;
+      event.preventDefault();
+    }
+
+    this.dragState.el.scrollLeft = this.dragState.scrollLeft - delta;
+  }
+
+  endCarouselDrag(event: PointerEvent) {
+    if (!this.dragState || this.dragState.pointerId !== event.pointerId) return;
+
+    this.suppressNextClick = this.dragState.dragged;
+    if (this.suppressNextClick) {
+      setTimeout(() => {
+        this.suppressNextClick = false;
+      }, 120);
+    }
+    this.dragState.el.releasePointerCapture?.(event.pointerId);
+    this.dragState = undefined;
+  }
+
+  shouldOpenFromClick(event: MouseEvent) {
+    if (!this.suppressNextClick) return true;
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.suppressNextClick = false;
+    return false;
+  }
+
+  private shuffle(items: any[]) {
+    return [...items].sort(() => Math.random() - 0.5);
   }
 
   async openArtistsList() {
@@ -91,6 +178,21 @@ export class HomePage {
     await m.present();
   }
 
+  async openArtistFromClick(event: MouseEvent, artist: any) {
+    if (!this.shouldOpenFromClick(event)) return;
+    await this.openArtist(artist);
+  }
+
+  async openArtwork(artwork: any) {
+    const m = await this.modalCtrl.create({
+      component: ArtworkDetailModalComponent,
+      componentProps: { artwork },
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+    await m.present();
+  }
+
   async openEstablishment(est: any) {
     if (!est?.user_id) return;
 
@@ -101,5 +203,10 @@ export class HomePage {
       initialBreakpoint: 0.95,
     });
     await m.present();
+  }
+
+  async openEstablishmentFromClick(event: MouseEvent, est: any) {
+    if (!this.shouldOpenFromClick(event)) return;
+    await this.openEstablishment(est);
   }
 }

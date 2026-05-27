@@ -7,6 +7,27 @@
 <ion-content>
   <div class="qz-bg">
     <main class="home-wrap">
+      <section class="featured-section" *ngIf="featuredArtworks.length">
+        <div class="featured-carousel" (scroll)="syncFeaturedIndex($event)">
+          <button
+            type="button"
+            class="featured-card"
+            *ngFor="let artwork of featuredArtworks; trackBy: trackById"
+            (click)="openArtwork(artwork)">
+            <img [src]="artwork.image_url" [alt]="artwork.title" />
+            <span class="featured-shade"></span>
+            <span class="featured-label">Obras</span>
+            <span class="featured-title">{{ artwork.title }}</span>
+          </button>
+        </div>
+
+        <div class="featured-dots" *ngIf="featuredArtworks.length > 1" aria-hidden="true">
+          <span
+            *ngFor="let artwork of featuredArtworks; let i = index; trackBy: trackById"
+            [class.active]="i === activeFeaturedIndex"></span>
+        </div>
+      </section>
+
       <section class="feed-section">
         <div class="section-head">
           <div>
@@ -15,14 +36,24 @@
           <ion-button class="text-link" fill="clear" size="small" (click)="openArtistsList()">Ver todos</ion-button>
         </div>
 
-        <div class="masonry" *ngIf="artworks.length; else emptyArtists">
-          <button
-            type="button"
-            class="pin-card artist-card"
-            *ngFor="let artwork of artworks; trackBy: trackByUserId"
-            (click)="openArtist(artwork)">
-            <img [src]="artwork.image_url" [alt]="artwork.title" />
-          </button>
+        <div
+          class="artist-carousel drag-carousel"
+          *ngIf="artists.length; else emptyArtists"
+          (pointerdown)="startCarouselDrag($event)"
+          (pointermove)="moveCarouselDrag($event)"
+          (pointerup)="endCarouselDrag($event)"
+          (pointercancel)="endCarouselDrag($event)">
+          <div
+            class="artist-slide"
+            *ngFor="let artist of artists; trackBy: trackByUserId">
+            <button
+              type="button"
+              class="artist-tile"
+              (click)="openArtistFromClick($event, artist)">
+              <img [src]="artist.image_url" [alt]="artist.title" />
+              <span>{{ artist.title }}</span>
+            </button>
+          </div>
         </div>
 
         <ng-template #emptyArtists>
@@ -38,14 +69,25 @@
           <ion-button class="text-link" fill="clear" size="small" (click)="openEstablishmentsList()">Ver todos</ion-button>
         </div>
 
-        <div class="masonry compact" *ngIf="establishments.length; else emptyEstablishments">
-          <button
-            type="button"
-            class="pin-card"
-            *ngFor="let e of establishments; trackBy: trackByUserId"
-            (click)="openEstablishment(e)">
-            <img [src]="e.image_url" [alt]="e.name" />
-          </button>
+        <div
+          class="establishment-carousel drag-carousel"
+          *ngIf="establishments.length; else emptyEstablishments"
+          (pointerdown)="startCarouselDrag($event)"
+          (pointermove)="moveCarouselDrag($event)"
+          (pointerup)="endCarouselDrag($event)"
+          (pointercancel)="endCarouselDrag($event)">
+          <div
+            class="establishment-slide"
+            *ngFor="let e of establishments; trackBy: trackByUserId">
+            <button
+              type="button"
+              class="establishment-card"
+              (click)="openEstablishmentFromClick($event, e)">
+              <img [src]="e.image_url" [alt]="e.name" />
+              <span class="establishment-category">{{ e.category || 'Establecimiento' }}</span>
+              <span class="establishment-name">{{ e.name }}</span>
+            </button>
+          </div>
         </div>
 
         <ng-template #emptyEstablishments>

@@ -1,9 +1,13 @@
 .home-wrap {
   width: min(1120px, 100%);
   margin: 0 auto;
-  padding: 10px 10px 0;
+  padding: 10px 8px 0;
   display: grid;
   gap: 18px;
+}
+
+.feed-section {
+  min-width: 0;
 }
 
 .section-head {
@@ -18,67 +22,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 900;
-}
-
-.masonry {
-  columns: 2 142px;
-  column-gap: 8px;
-}
-
-.masonry.compact {
-  columns: 2 148px;
-}
-
-.pin-card {
-  width: 100%;
-  margin: 0 0 8px;
-  padding: 0;
-  display: inline-block;
-  overflow: hidden;
-  break-inside: avoid;
-  background: var(--qz-surface-2);
-  border: 0;
-  border-radius: 8px;
-  color: var(--qz-text);
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-}
-
-.pin-card:active {
-  transform: scale(0.985);
-}
-
-@media (hover: hover) {
-  .pin-card:hover {
-    border-color: #cfcfcf;
-    box-shadow: var(--qz-shadow);
-    transform: translateY(-2px);
-  }
-}
-
-.pin-card img {
-  width: 100%;
-  display: block;
-  object-fit: cover;
-  aspect-ratio: 4 / 5;
-}
-
-.artist-card:nth-child(3n + 2) img {
-  aspect-ratio: 1 / 1.22;
-}
-
-.artist-card:nth-child(3n) img {
-  aspect-ratio: 1 / 1.45;
-}
-
-.compact .pin-card:nth-child(odd) img {
-  aspect-ratio: 4 / 3;
-}
-
-.compact .pin-card:nth-child(even) img {
-  aspect-ratio: 1 / 1.35;
+  line-height: 24px;
 }
 
 .empty-state {
@@ -93,6 +37,7 @@
   --padding-start: 6px;
   --padding-end: 6px;
   --color: var(--qz-text);
+  flex: 0 0 auto;
   height: 28px;
   font-size: 12px;
   letter-spacing: 0;
@@ -105,14 +50,5 @@
 @media (min-width: 760px) {
   .home-wrap {
     padding: 14px 18px 0;
-  }
-
-  .masonry {
-    columns: 5 170px;
-    column-gap: 10px;
-  }
-
-  .masonry.compact {
-    columns: 4 190px;
   }
 }
