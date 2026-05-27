@@ -6,6 +6,7 @@ import { EstablishmentListModalComponent } from '../../modals/establishment-list
 import { ArtistDetailModalComponent } from '../../modals/artist-detail-modal/artist-detail-modal.component';
 import { EstablishmentDetailModalComponent } from '../../modals/establishment-detail-modal/establishment-detail-modal.component';
 import { PublicApiService } from 'src/app/core/api/public-api.service';
+import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
 @Component({
   standalone: false,
@@ -34,7 +35,7 @@ export class HomePage {
         this.artworks = items.map((a: any) => ({
           title: a.display_name ?? a.displayName ?? 'Artista',
           artist: a.artistic_style ?? a.artisticStyle ?? '',
-          image_url: a.profile_image_url ?? a.profileImageUrl ?? 'assets/avatar-placeholder.png',
+          image_url: normalizeImageUrl(a.profile_image_url ?? a.profileImageUrl) || 'assets/avatar-placeholder.png',
           user_id: a.user_id ?? a.userId,
         }));
       },
@@ -47,7 +48,7 @@ export class HomePage {
         this.establishments = items.map((e: any) => ({
           name: e.display_name ?? e.displayName ?? 'Establecimiento',
           category: e.category ?? '',
-          image_url: e.profile_image_url ?? e.profileImageUrl ?? 'assets/avatar-placeholder.png',
+          image_url: normalizeImageUrl(e.profile_image_url ?? e.profileImageUrl) || 'assets/avatar-placeholder.png',
           user_id: e.user_id ?? e.userId,
         }));
       },

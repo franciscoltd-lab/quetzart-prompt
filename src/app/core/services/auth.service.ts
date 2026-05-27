@@ -17,6 +17,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     this.token$.next(null);
+    this.profileStore.clear();
   }
 
   getToken() {

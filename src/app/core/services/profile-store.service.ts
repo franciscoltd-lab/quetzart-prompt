@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AppProfile } from '../models/profile.model';
+import { normalizeImageUrl } from '../utils/image-url';
 
 const LS_KEY = 'qz_profile_v1';
 
@@ -32,15 +33,35 @@ export class ProfileStoreService {
   }
 
   private save(profile: AppProfile) {
-    localStorage.setItem(LS_KEY, JSON.stringify(profile));
+    localStorage.setItem(LS_KEY, JSON.stringify(this.normalize(profile)));
   }
 
   private load(): AppProfile | null {
     try {
       const raw = localStorage.getItem(LS_KEY);
-      return raw ? (JSON.parse(raw) as AppProfile) : null;
+      return raw ? this.normalize(JSON.parse(raw) as AppProfile) : null;
     } catch {
       return null;
     }
+  }
+
+  private normalize(profile: AppProfile): AppProfile {
+    return {
+      ...profile,
+      profileImage: normalizeImageUrl(profile.profileImage),
+      gallery: (profile.gallery || []).map((item: any, index: number) => {
+        if (typeof item === 'string') {
+          return {
+            id: index,
+            url: normalizeImageUrl(item) || 'assets/avatar-placeholder.png',
+          };
+        }
+
+        return {
+          ...item,
+          url: normalizeImageUrl(item.url ?? item.image_url ?? item.imageUrl) || 'assets/avatar-placeholder.png',
+        };
+      }),
+    };
   }
 }

@@ -7,6 +7,7 @@ import { AppProfile } from '../../../core/models/profile.model';
 import { PhotoService } from 'src/app/core/services/photo.service';
 
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
+import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
 const CURP_REGEX = /^[A-Z][AEIOUX][A-Z]{2}\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])[HM](AS|BC|BS|CC|CL|CM|CS|CH|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS)[A-Z]{3}[A-Z0-9]\d$/;
 const STRONG_PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
@@ -93,7 +94,7 @@ export class RegisterArtistModalComponent {
             const mapped: AppProfile = {
               role: p.role,
               displayName: p.display_name ?? p.displayName,
-              profileImage: p.profile_image_url ?? p.profileImage,
+              profileImage: normalizeImageUrl(p.profile_image_url ?? p.profileImage),
               lastNameChangeISO: p.last_name_change_at ?? null,
 
               artisticStyle: p.artistic_style ?? null,
@@ -108,7 +109,7 @@ export class RegisterArtistModalComponent {
 
               gallery: (p.gallery || []).map((g: any) => ({
                 id: g.id,
-                url: g.image_url ?? g.imageUrl,
+                url: normalizeImageUrl(g.image_url ?? g.imageUrl) || 'assets/avatar-placeholder.png',
               })),
 
             };

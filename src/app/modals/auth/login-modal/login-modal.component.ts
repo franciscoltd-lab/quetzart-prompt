@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ProfileStoreService } from '../../../core/services/profile-store.service';
 import { AppProfile } from '../../../core/models/profile.model';
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
+import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
 @Component({
   standalone: false,
@@ -48,7 +49,7 @@ export class LoginModalComponent {
             const mapped: AppProfile = {
               role: p.role,
               displayName: p.display_name ?? p.displayName,
-              profileImage: p.profile_image_url ?? p.profileImage,
+              profileImage: normalizeImageUrl(p.profile_image_url ?? p.profileImage),
               lastNameChangeISO: p.last_name_change_at ?? p.lastNameChangeISO ?? null,
 
               // artist
@@ -64,7 +65,14 @@ export class LoginModalComponent {
               inferredMunicipality: p.municipality ?? '',
 
               // gallery
-              gallery: (p.gallery || []).map((g: any) => g.image_url ?? g.imageUrl),
+              gallery: (p.gallery || []).map((g: any) => ({
+                id: g.id,
+                url: normalizeImageUrl(g.image_url ?? g.imageUrl) || 'assets/avatar-placeholder.png',
+                title: g.title ?? null,
+                technique: g.technique ?? g.tecnica ?? null,
+                price: g.price ?? g.precio ?? null,
+                description: g.description ?? g.caption ?? null,
+              })),
             };
 
             this.profileStore.setProfile(mapped);

@@ -10,6 +10,7 @@ import { EditTextModalComponent } from '../../modals/common/edit-text-modal/edit
 
 import { PhotoService } from '../../core/services/photo.service';
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
+import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
 @Component({
   standalone: false,
@@ -35,13 +36,19 @@ export class ProfilePage {
     private authApi: AuthApiService,
   ) {}
 
+  ionViewDidEnter() {
+    if (this.auth.isLoggedIn()) {
+      this.reloadMe();
+    }
+  }
+
   private reloadMe() {
     this.authApi.me().subscribe({
       next: (p: any) => {
         const mapped: AppProfile = {
           role: p.role,
           displayName: p.display_name ?? p.displayName,
-          profileImage: p.profile_image_url ?? p.profileImage ?? null,
+          profileImage: normalizeImageUrl(p.profile_image_url ?? p.profileImage),
           lastNameChangeISO: p.last_name_change_at ?? null,
 
           artisticStyle: p.artistic_style ?? null,
@@ -56,7 +63,7 @@ export class ProfilePage {
 
           gallery: (p.gallery || []).map((g: any) => ({
             id: g.id,
-            url: g.image_url ?? g.imageUrl,
+            url: normalizeImageUrl(g.image_url ?? g.imageUrl) || 'assets/avatar-placeholder.png',
             title: g.title ?? null,
             technique: g.technique ?? g.tecnica ?? null,
             price: g.price ?? g.precio ?? null,

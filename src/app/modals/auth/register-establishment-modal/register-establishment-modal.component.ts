@@ -7,6 +7,7 @@ import { ProfileStoreService } from 'src/app/core/services/profile-store.service
 import { AppProfile } from 'src/app/core/models/profile.model';
 import { PhotoService } from 'src/app/core/services/photo.service';
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
+import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
 import {
   GeoApiService,
@@ -157,7 +158,7 @@ export class RegisterEstablishmentModalComponent {
             const mapped: AppProfile = {
               role: p.role,
               displayName: p.display_name ?? p.displayName,
-              profileImage: p.profile_image_url ?? p.profileImage,
+              profileImage: normalizeImageUrl(p.profile_image_url ?? p.profileImage),
               lastNameChangeISO: p.last_name_change_at ?? null,
 
               // artist (no aplica)
@@ -172,9 +173,10 @@ export class RegisterEstablishmentModalComponent {
               inferredColony: p.colony ?? '',
               inferredMunicipality: p.municipality ?? '',
 
-              gallery: (p.gallery || []).map(
-                (g: any) => g.image_url ?? g.imageUrl
-              ),
+              gallery: (p.gallery || []).map((g: any) => ({
+                id: g.id,
+                url: normalizeImageUrl(g.image_url ?? g.imageUrl) || 'assets/avatar-placeholder.png',
+              })),
             };
 
             this.profileStore.setProfile(mapped);
