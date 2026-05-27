@@ -1,6 +1,13 @@
 export type Role = 'artist' | 'establishment';
 
-export type GalleryItem = { id: number; url: string };
+export type GalleryItem = {
+  id: number;
+  url: string;
+  title?: string | null;
+  technique?: string | null;
+  price?: string | number | null;
+  description?: string | null;
+};
 
 export interface AppProfile {
   role: 'artist' | 'establishment';

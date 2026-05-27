@@ -11,9 +11,12 @@ import { PublicApiService } from 'src/app/core/api/public-api.service';
 export class EstablishmentDetailModalComponent implements OnInit {
 
   @Input() userId!: number;
+  @Input() est: any;
 
-  est: any;
   loading = true;
+  selectedImageUrl: string | null = null;
+  selectedImageAlt = 'Imagen ampliada';
+  imageZoomed = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -21,6 +24,11 @@ export class EstablishmentDetailModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (!this.userId && this.est) {
+      this.loading = false;
+      return;
+    }
+
     this.publicApi.getEstablishment(this.userId).subscribe({
       next: (res) => this.est = res,
       error: (e) => console.error(e),
@@ -29,4 +37,22 @@ export class EstablishmentDetailModalComponent implements OnInit {
   }
 
   dismiss() { this.modalCtrl.dismiss(); }
+
+  openImage(url: string | null | undefined, alt = 'Imagen ampliada') {
+    if (!url) return;
+
+    this.selectedImageUrl = url;
+    this.selectedImageAlt = alt;
+    this.imageZoomed = false;
+  }
+
+  closeImage() {
+    this.selectedImageUrl = null;
+    this.imageZoomed = false;
+  }
+
+  toggleZoom(event: Event) {
+    event.stopPropagation();
+    this.imageZoomed = !this.imageZoomed;
+  }
 }

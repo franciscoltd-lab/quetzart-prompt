@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ProfileStoreService } from '../../core/services/profile-store.service';
-import { AppProfile } from '../../core/models/profile.model';
+import { AppProfile, GalleryItem } from '../../core/models/profile.model';
 
 import { LoginModalComponent } from '../../modals/auth/login-modal/login-modal.component';
 import { AccountTypeModalComponent } from '../../modals/auth/account-type-modal/account-type-modal.component';
@@ -19,6 +19,12 @@ import { AuthApiService } from 'src/app/core/api/auth-api.service';
 })
 export class ProfilePage {
   profile$ = this.profileStore.profile$;
+  selectedImageUrl: string | null = null;
+  selectedImageAlt = 'Imagen ampliada';
+  imageZoomed = false;
+  selectedArtwork: GalleryItem | null = null;
+  selectedArtworkOwner = '';
+  selectedArtworkKind = 'Obra';
 
   constructor(
     public auth: AuthService,
@@ -51,6 +57,10 @@ export class ProfilePage {
           gallery: (p.gallery || []).map((g: any) => ({
             id: g.id,
             url: g.image_url ?? g.imageUrl,
+            title: g.title ?? null,
+            technique: g.technique ?? g.tecnica ?? null,
+            price: g.price ?? g.precio ?? null,
+            description: g.description ?? g.caption ?? null,
           })),
         };
 
@@ -88,6 +98,60 @@ export class ProfilePage {
 
   categoryOrStyle(p: AppProfile) {
     return p.role === 'artist' ? (p.artisticStyle || 'Sin estilo') : (p.category || 'Sin categoría');
+  }
+
+  openImage(url: string | null | undefined, alt = 'Imagen ampliada') {
+    if (!url) return;
+
+    this.selectedImageUrl = url;
+    this.selectedImageAlt = alt;
+    this.imageZoomed = false;
+  }
+
+  closeImage() {
+    this.selectedImageUrl = null;
+    this.imageZoomed = false;
+  }
+
+  toggleZoom(event: Event) {
+    event.stopPropagation();
+    this.imageZoomed = !this.imageZoomed;
+  }
+
+  openArtwork(item: GalleryItem, p: AppProfile, index: number) {
+    this.selectedArtwork = {
+      ...item,
+      title: item.title || 'Sin titulo',
+      technique: item.technique || this.defaultTechnique(p),
+      price: item.price || 'Precio a consultar',
+      description: item.description || this.defaultArtworkDescription(p),
+    };
+    this.selectedArtworkOwner = p.displayName;
+    this.selectedArtworkKind = p.role === 'artist' ? 'Obra del portafolio' : 'Foto del establecimiento';
+  }
+
+  closeArtwork() {
+    this.selectedArtwork = null;
+  }
+
+  enlargeSelectedArtwork(event: Event) {
+    event.stopPropagation();
+    if (!this.selectedArtwork?.url) return;
+
+    this.openImage(this.selectedArtwork.url, this.selectedArtwork.title || 'Imagen ampliada');
+  }
+
+  private defaultArtworkDescription(p: AppProfile) {
+    if (p.role === 'artist') {
+      return p.bio || `Pieza del portafolio de ${p.displayName}.`;
+    }
+
+    const location = [p.inferredColony, p.inferredMunicipality].filter(Boolean).join(', ');
+    return location ? `Imagen del espacio en ${location}.` : `Imagen del espacio ${p.displayName}.`;
+  }
+
+  private defaultTechnique(p: AppProfile) {
+    return p.role === 'artist' ? (p.artisticStyle || 'Tecnica no especificada') : (p.category || 'Espacio');
   }
 
   async editName(p: AppProfile) {

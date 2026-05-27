@@ -44,8 +44,9 @@ export class ArtistListModalComponent implements OnInit {
   const m = await this.modalCtrl.create({
     component: ArtistDetailModalComponent,
     componentProps: { userId: a.user_id },
-    breakpoints: [0, 0.95],
-    initialBreakpoint: 0.95,
+    cssClass: 'qz-large-modal',
+    breakpoints: [0, 1],
+    initialBreakpoint: 1,
   });
   await m.present();
 }

@@ -3,8 +3,8 @@
     <ion-title>Perfil</ion-title>
 
     <ion-buttons slot="end" *ngIf="auth.isLoggedIn()">
-      <ion-button (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
+      <ion-button (click)="logout()" aria-label="Cerrar sesion">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -12,106 +12,158 @@
 
 <ion-content>
   <div class="qz-bg">
-    <div class="profile-wrap">
-
-      <!-- NO LOGEADO -->
+    <main class="profile-wrap">
       <ng-container *ngIf="!auth.isLoggedIn(); else loggedTemplate">
-        <div class="qz-glass welcome">
-          <div class="t1">Tu perfil en Quetzart</div>
-          <div class="t2">Inicia sesión o crea tu cuenta para continuar.</div>
+        <section class="welcome-panel">
+          <p class="eyebrow">Quetzart</p>
+          <h1>Tu perfil creativo empieza aqui.</h1>
+          <p>Inicia sesion o crea tu cuenta para administrar tu presencia en la app.</p>
 
           <div class="actions">
-            <ion-button expand="block" (click)="openLogin()">Iniciar sesión</ion-button>
+            <ion-button expand="block" (click)="openLogin()">Iniciar sesion</ion-button>
             <ion-button expand="block" fill="outline" (click)="openAccountType()">Crear cuenta</ion-button>
           </div>
-        </div>
+        </section>
       </ng-container>
 
-      <!-- LOGEADO -->
       <ng-template #loggedTemplate>
         <ng-container *ngIf="(profile$ | async) as p; else noProfile">
-
-          <div class="qz-glass header-card">
-            <div class="avatar-wrap">
-              <img class="avatar" [src]="p.profileImage || 'assets/avatar-placeholder.png'" alt="avatar" />
-              <ion-button size="small" class="edit-avatar" (click)="changeProfileImage(p)">
-                <ion-icon name="camera-outline"></ion-icon>
-              </ion-button>
-
-            </div>
+          <section class="profile-hero">
+            <button
+              type="button"
+              class="avatar-wrap"
+              (click)="openImage(p.profileImage || 'assets/avatar-placeholder.png', p.displayName)">
+              <img class="avatar" [src]="p.profileImage || 'assets/avatar-placeholder.png'" [alt]="p.displayName" />
+              <span class="view-hint">
+                <ion-icon name="expand-outline"></ion-icon>
+              </span>
+            </button>
 
             <div class="info">
               <div class="name-row">
-                <div class="name">{{ p.displayName }}</div>
-                <ion-button size="small" fill="clear" (click)="editName(p)">
-                  <ion-icon name="create-outline"></ion-icon>
+                <div>
+                  <p class="eyebrow">{{ roleLabel(p) }}</p>
+                  <h1>{{ p.displayName }}</h1>
+                </div>
+                <ion-button size="small" fill="clear" (click)="editName(p)" aria-label="Editar nombre">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
                 </ion-button>
               </div>
 
               <div class="meta">
-                <span class="qz-pill">{{ roleLabel(p) }}</span>
                 <span class="qz-pill">{{ categoryOrStyle(p) }}</span>
               </div>
 
-              <div class="bio" *ngIf="p.role === 'artist'">
-                {{ p.bio || 'Sin descripción' }}
+              <div class="profile-stats">
+                <span><strong>{{ p.gallery.length }}</strong> fotos</span>
+                <span><strong>{{ roleLabel(p) }}</strong></span>
               </div>
 
-               <ion-button expand="block" fill="outline" (click)="editCategoryOrStyle(p)">
-                  Editar {{ p.role === 'artist' ? 'corriente artística' : 'categoría' }}
-                </ion-button>
+              <p class="bio" *ngIf="p.role === 'artist'">{{ p.bio || 'Sin descripcion' }}</p>
 
-                <ion-button expand="block" fill="outline" *ngIf="p.role === 'artist'" (click)="editBio(p)">
-                  Editar descripción
+              <div class="profile-actions">
+                <ion-button fill="outline" size="small" (click)="changeProfileImage(p)">
+                  <ion-icon name="camera-outline" slot="start"></ion-icon>
+                  Foto
                 </ion-button>
+                <ion-button fill="outline" size="small" (click)="editCategoryOrStyle(p)">
+                  <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+                  {{ p.role === 'artist' ? 'Estilo' : 'Categoria' }}
+                </ion-button>
+                <ion-button fill="outline" size="small" *ngIf="p.role === 'artist'" (click)="editBio(p)">
+                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                  Bio
+                </ion-button>
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div class="qz-glass grid-card">
-            <div class="grid-head">
-              <div class="grid-title">{{ p.role === 'artist' ? 'Portafolio' : 'Fotos del establecimiento' }}</div>
+          <section class="gallery-section">
+            <div class="section-head">
+              <div>
+                <h2>{{ p.role === 'artist' ? 'Portafolio' : 'Fotos del establecimiento' }}</h2>
+                <p>{{ p.gallery.length }} imagenes</p>
+              </div>
               <ion-button size="small" (click)="addPhotos(p)">
-                <ion-icon name="add-outline"></ion-icon>
-                Añadir
+                <ion-icon name="add-outline" slot="start"></ion-icon>
+                Anadir
               </ion-button>
-
             </div>
 
-            <ion-grid *ngIf="p.gallery.length">
-              <ion-row>
-                <ion-col size="4" *ngFor="let img of p.gallery; let i = index">
-                  <div class="thumb">
-                    <img [src]="img.url" alt="img" />
-                    <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i)">
-                      <ion-icon name="close-circle"></ion-icon>
-                    </ion-button>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-
-            <div class="bio" *ngIf="!p.gallery.length" style="margin-top:8px;">
-              Aún no tienes imágenes. Presiona “Añadir”.
+            <div class="gallery-grid" *ngIf="p.gallery.length; else emptyGallery">
+              <button
+                type="button"
+                class="gallery-item"
+                *ngFor="let img of p.gallery; let i = index"
+                (click)="openArtwork(img, p, i)">
+                <img [src]="img.url" alt="Imagen de galeria" />
+                <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i); $event.stopPropagation()" aria-label="Eliminar foto">
+                  <ion-icon name="close-circle"></ion-icon>
+                </ion-button>
+              </button>
             </div>
-          </div>
 
-          <div style="height: 90px;"></div>
+            <ng-template #emptyGallery>
+              <div class="empty-gallery">
+                Aun no tienes imagenes. Presiona Anadir para construir tu portafolio.
+              </div>
+            </ng-template>
+          </section>
+
+          <div class="bottom-space"></div>
         </ng-container>
 
-        <!-- CASO RARO: token pero no profile -->
         <ng-template #noProfile>
-          <div class="qz-glass welcome">
-            <div class="t1">Sesión activa</div>
-            <div class="t2">No encontramos tu perfil guardado. Crea tu perfil para continuar.</div>
+          <section class="welcome-panel">
+            <p class="eyebrow">Sesion activa</p>
+            <h1>No encontramos tu perfil.</h1>
+            <p>Crea tu perfil para continuar usando Quetzart.</p>
 
             <div class="actions">
               <ion-button expand="block" (click)="openAccountType()">Crear perfil</ion-button>
-              <ion-button expand="block" fill="outline" (click)="logout()">Cerrar sesión</ion-button>
+              <ion-button expand="block" fill="outline" (click)="logout()">Cerrar sesion</ion-button>
             </div>
-          </div>
+          </section>
         </ng-template>
       </ng-template>
+    </main>
 
+    <div class="artwork-viewer" *ngIf="selectedArtwork" (click)="closeArtwork()" role="dialog" aria-modal="true">
+      <article class="artwork-sheet" (click)="$event.stopPropagation()">
+        <ion-button fill="clear" class="sheet-close" (click)="closeArtwork()" aria-label="Cerrar obra">
+          <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+
+        <button type="button" class="product-photo" (click)="enlargeSelectedArtwork($event)">
+          <img [src]="selectedArtwork.url" [alt]="selectedArtwork.title || 'Obra'" />
+          <span>
+            <ion-icon name="expand-outline"></ion-icon>
+            Ampliar
+          </span>
+        </button>
+
+        <div class="product-info">
+          <p class="product-kicker">{{ selectedArtworkKind }}</p>
+          <h2>{{ selectedArtwork.title }}</h2>
+          <p class="product-owner">{{ selectedArtworkOwner }}</p>
+          <div class="product-specs">
+            <span>Tecnica: <strong>{{ selectedArtwork.technique }}</strong></span>
+            <span>Precio: <strong>{{ selectedArtwork.price }}</strong></span>
+          </div>
+          <p class="product-description">{{ selectedArtwork.description }}</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="image-viewer" *ngIf="selectedImageUrl" (click)="closeImage()" role="dialog" aria-modal="true">
+      <ion-button fill="clear" class="viewer-close" (click)="closeImage(); $event.stopPropagation()" aria-label="Cerrar imagen">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <img
+        [class.zoomed]="imageZoomed"
+        [src]="selectedImageUrl"
+        [alt]="selectedImageAlt"
+        (click)="toggleZoom($event)" />
     </div>
   </div>
 </ion-content>

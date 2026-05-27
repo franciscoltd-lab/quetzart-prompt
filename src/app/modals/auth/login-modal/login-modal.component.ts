@@ -14,6 +14,9 @@ import { AuthApiService } from 'src/app/core/api/auth-api.service';
 export class LoginModalComponent {
   email = '';
   password = '';
+  resetCode = '';
+  newPassword = '';
+  resetStep: 'login' | 'email' | 'code' | 'password' = 'login';
   loading = false;
 
   constructor(
@@ -84,6 +87,103 @@ export class LoginModalComponent {
         const t = await this.toastCtrl.create({
           message: 'Email o contraseña incorrectos.',
           duration: 1600,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+    });
+  }
+
+  startPasswordReset() {
+    this.resetStep = 'email';
+    this.password = '';
+    this.resetCode = '';
+    this.newPassword = '';
+  }
+
+  backToLogin() {
+    this.resetStep = 'login';
+    this.resetCode = '';
+    this.newPassword = '';
+  }
+
+  requestPasswordReset() {
+    if (!this.email) return;
+
+    this.loading = true;
+    this.authApi.requestPasswordReset(this.email.trim()).subscribe({
+      next: async () => {
+        this.loading = false;
+        this.resetStep = 'code';
+        const t = await this.toastCtrl.create({
+          message: 'Si el correo existe, enviamos un codigo de recuperacion.',
+          duration: 1800,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async () => {
+        this.loading = false;
+        const t = await this.toastCtrl.create({
+          message: 'No pude enviar el codigo. Intenta de nuevo.',
+          duration: 1800,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+    });
+  }
+
+  verifyPasswordResetCode() {
+    if (!this.email || !this.resetCode) return;
+
+    this.loading = true;
+    this.authApi.verifyPasswordResetCode(this.email.trim(), this.resetCode.trim()).subscribe({
+      next: async () => {
+        this.loading = false;
+        this.resetStep = 'password';
+        const t = await this.toastCtrl.create({
+          message: 'Codigo validado. Escribe tu nueva contrasena.',
+          duration: 1400,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async () => {
+        this.loading = false;
+        const t = await this.toastCtrl.create({
+          message: 'Codigo invalido o expirado.',
+          duration: 1600,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+    });
+  }
+
+  confirmPasswordReset() {
+    if (!this.email || !this.resetCode || !this.newPassword) return;
+
+    this.loading = true;
+    this.authApi.confirmPasswordReset(this.email.trim(), this.resetCode.trim(), this.newPassword).subscribe({
+      next: async () => {
+        this.loading = false;
+        this.password = '';
+        this.newPassword = '';
+        this.resetCode = '';
+        this.resetStep = 'login';
+        const t = await this.toastCtrl.create({
+          message: 'Contrasena actualizada. Ya puedes iniciar sesion.',
+          duration: 1800,
+          position: 'bottom',
+        });
+        await t.present();
+      },
+      error: async () => {
+        this.loading = false;
+        const t = await this.toastCtrl.create({
+          message: 'No pude actualizar la contrasena. Revisa el codigo.',
+          duration: 1800,
           position: 'bottom',
         });
         await t.present();

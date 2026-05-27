@@ -1,9 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
 import { ArtistListModalComponent } from '../../modals/artist-list-modal/artist-list-modal.component';
 import { EstablishmentListModalComponent } from '../../modals/establishment-list-modal/establishment-list-modal.component';
-import { ArtworkDetailModalComponent } from '../../modals/artwork-detail-modal/artwork-detail-modal.component';
+import { ArtistDetailModalComponent } from '../../modals/artist-detail-modal/artist-detail-modal.component';
 import { EstablishmentDetailModalComponent } from '../../modals/establishment-detail-modal/establishment-detail-modal.component';
 import { PublicApiService } from 'src/app/core/api/public-api.service';
 
@@ -14,12 +14,8 @@ import { PublicApiService } from 'src/app/core/api/public-api.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  // ahora vienen del API
-  artworks: any[] = [];          // si aún no hay endpoint, lo dejamos vacío o mock temporal
+  artworks: any[] = [];
   establishments: any[] = [];
-
-  @ViewChild('artSwiper', { static: false }) artSwiper?: ElementRef;
-  @ViewChild('estSwiper', { static: false }) estSwiper?: ElementRef;
 
   constructor(
     public auth: AuthService,
@@ -28,19 +24,16 @@ export class HomePage {
   ) { }
 
   ionViewDidEnter(): void {
-    this.initSwipers();
     this.loadHomeData();
   }
 
   private loadHomeData() {
-    // Artistas para el swiper “Artistas”
-    this.publicApi.listArtists('', 1, 10).subscribe({
+    this.publicApi.listArtists('', 1, 12).subscribe({
       next: (r) => {
         const items = r?.items ?? r ?? [];
         this.artworks = items.map((a: any) => ({
           title: a.display_name ?? a.displayName ?? 'Artista',
           artist: a.artistic_style ?? a.artisticStyle ?? '',
-          price: '', // si no aplica, déjalo vacío
           image_url: a.profile_image_url ?? a.profileImageUrl ?? 'assets/avatar-placeholder.png',
           user_id: a.user_id ?? a.userId,
         }));
@@ -48,8 +41,7 @@ export class HomePage {
       error: (err) => console.error('listArtists error', err),
     });
 
-    // Establecimientos para el swiper “Establecimientos”
-    this.publicApi.listEstablishments('', 1, 10).subscribe({
+    this.publicApi.listEstablishments('', 1, 8).subscribe({
       next: (r) => {
         const items = r?.items ?? r ?? [];
         this.establishments = items.map((e: any) => ({
@@ -63,33 +55,8 @@ export class HomePage {
     });
   }
 
-
-  private initSwipers() {
-    const art = this.artSwiper?.nativeElement;
-    if (art && !art.swiper) {
-      Object.assign(art, {
-        slidesPerView: 1.05,
-        spaceBetween: 14,
-        pagination: { clickable: true },
-        speed: 450,
-        observer: true,
-        observeParents: true,
-      });
-      art.initialize();
-    }
-
-    const est = this.estSwiper?.nativeElement;
-    if (est && !est.swiper) {
-      Object.assign(est, {
-        slidesPerView: 1.05,
-        spaceBetween: 14,
-        pagination: { clickable: true },
-        speed: 450,
-        observer: true,
-        observeParents: true,
-      });
-      est.initialize();
-    }
+  trackByUserId(_: number, item: any) {
+    return item.user_id ?? item.id ?? item.name ?? item.title;
   }
 
   async openArtistsList() {
@@ -110,30 +77,28 @@ export class HomePage {
     await m.present();
   }
 
-  async openArtwork(artwork: any) {
-    // ahora “artwork” realmente es “artist card”
-    // lo correcto del plan: abrir PERFIL público del artista
-    // por ahora lo mandas a tu modal de detalle (luego lo convertimos a perfil público real)
+  async openArtist(artist: any) {
+    if (!artist?.user_id) return;
+
     const m = await this.modalCtrl.create({
-      component: ArtworkDetailModalComponent,
-      componentProps: { artwork },
-      breakpoints: [0, 0.95],
-      initialBreakpoint: 0.95,
+      component: ArtistDetailModalComponent,
+      componentProps: { userId: artist.user_id },
+      cssClass: 'qz-large-modal',
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
     await m.present();
   }
 
   async openEstablishment(est: any) {
+    if (!est?.user_id) return;
+
     const m = await this.modalCtrl.create({
       component: EstablishmentDetailModalComponent,
-      componentProps: { userId: est.user_id }, // <-- NO est completo
+      componentProps: { userId: est.user_id },
       breakpoints: [0, 0.95],
       initialBreakpoint: 0.95,
     });
     await m.present();
-  }
-
-  openNotifications() {
-    alert('Notificaciones (UI en la siguiente parte)');
   }
 }

@@ -21,6 +21,22 @@ export class AuthApiService {
         });
     }
 
+    requestPasswordReset(email: string) {
+        return this.http.post<{ message: string }>(`${this.baseUrl}/auth/password-reset/request`, { email });
+    }
+
+    verifyPasswordResetCode(email: string, code: string) {
+        return this.http.post<{ message: string }>(`${this.baseUrl}/auth/password-reset/verify`, { email, code });
+    }
+
+    confirmPasswordReset(email: string, code: string, newPassword: string) {
+        return this.http.post<{ message: string }>(`${this.baseUrl}/auth/password-reset/confirm`, {
+            email,
+            code,
+            new_password: newPassword
+        });
+    }
+
     registerArtist(payload: any) {
         return this.http.post<{ access_token: string; token_type: string }>(
             `${this.baseUrl}/auth/register-artist`,

@@ -38,54 +38,79 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
 
 
 /* iOS feel: padding + typography */
 ion-content {
-  --background: transparent;
+  --background: #ffffff;
 }
 
-/* Fondo con degradado suave (tipo iOS) */
+html,
+body,
+ion-app,
+ion-tabs,
+ion-router-outlet,
+.ion-page {
+  background: #ffffff;
+  color-scheme: light;
+}
+
 .qz-bg {
-  background: radial-gradient(1200px 600px at 20% 0%, rgba(124, 92, 255, 0.35), transparent 55%),
-              radial-gradient(900px 500px at 90% 20%, rgba(0, 216, 255, 0.20), transparent 60%),
-              linear-gradient(180deg, rgba(10,12,18,1) 0%, rgba(10,12,18,1) 60%, rgba(10,12,18,1) 100%);
-  // min-height: 100vh;
+  background: var(--qz-bg);
+  min-height: 100%;
 }
 
-/* Glass card */
 .qz-glass {
   background: var(--qz-surface);
   border: 1px solid var(--qz-border);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-radius: 18px;
-  box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+  border-radius: 8px;
+  box-shadow: none;
 }
 
-/* Glass header */
 .qz-header {
-  --background: rgba(20, 22, 30, 0.35);
+  --background: rgba(255, 255, 255, 0.92);
+  color: var(--qz-text);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--qz-border);
 }
 
-/* Chips/badges */
 .qz-pill {
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--qz-surface-2);
+  border: 1px solid var(--qz-border);
   border-radius: 999px;
   padding: 6px 10px;
   color: var(--qz-text-dim);
 }
 
-/* Inputs con estilo iOS glass */
 .qz-input {
-  --background: rgba(255,255,255,0.06);
-  --border-radius: 16px;
+  --background: var(--qz-surface-2);
+  --border-radius: 999px;
   --padding-start: 14px;
   --padding-end: 14px;
   --color: var(--qz-text);
 }
+
+ion-button {
+  --border-radius: 999px;
+  text-transform: none;
+  font-weight: 700;
+}
+
+ion-toolbar {
+  --color: var(--qz-text);
+}
+
+ion-title {
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.artwork-viewer{position:fixed;inset:0;z-index:900;display:grid;align-items:end;background:rgba(0,0,0,.38)}.artwork-sheet{position:relative;max-height:calc(100vh - 22px);overflow:auto;border-radius:18px 18px 0 0;background:#fff}.sheet-close{position:absolute;top:10px;right:10px;z-index:1;--background:rgba(255,255,255,.9);--color:var(--qz-text)}.product-photo{position:relative;width:100%;padding:0;border:0;background:var(--qz-surface-2);cursor:zoom-in}.product-photo img{width:100%;max-height:62vh;display:block;object-fit:contain}.product-photo span{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--qz-text);font-size:12px;font-weight:800}.product-info{padding:16px;display:grid;gap:8px}.product-kicker,.product-owner,.product-description{margin:0}.product-kicker{color:var(--qz-text-dim);font-size:12px;font-weight:900;text-transform:uppercase}.product-info h2{margin:0;font-size:24px;font-weight:950;line-height:1}.product-owner{color:var(--qz-text);font-size:14px;font-weight:800}.product-specs{display:grid;gap:6px;padding:10px 0;border-top:1px solid var(--qz-border);border-bottom:1px solid var(--qz-border);color:var(--qz-text-dim);font-size:13px}.product-specs strong{color:var(--qz-text)}.product-description{color:var(--qz-text-dim);font-size:14px;line-height:1.45}.image-viewer{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:52px 14px 28px;overflow:auto;background:rgba(0,0,0,.88)}.image-viewer img{max-width:100%;max-height:100%;display:block;border-radius:8px;object-fit:contain;cursor:zoom-in}.image-viewer img.zoomed{max-width:none;max-height:none;width:min(1400px,180vw);cursor:zoom-out}.viewer-close{position:fixed;top:12px;right:12px;--color:#fff;--background:rgba(255,255,255,.12)}@media (min-width:760px){.artwork-viewer{place-items:center;padding:24px}.artwork-sheet{width:min(640px,100%);max-height:min(820px,calc(100vh - 48px));border-radius:8px}.product-photo img{max-height:560px}.product-info{padding:24px}}
+
+.artwork-sheet{width:100%;box-shadow:0 22px 70px rgba(0,0,0,.22)}.product-info{gap:12px}.product-info h2{font-size:clamp(24px,6vw,34px);line-height:1.05}.product-owner{font-size:15px}.product-specs{grid-template-columns:1fr;gap:10px;padding:14px 0;font-size:14px}.product-specs span{display:flex;justify-content:space-between;gap:16px}.product-description{font-size:15px;line-height:1.55;white-space:pre-wrap}@media (min-width:760px){.artwork-sheet{width:min(860px,calc(100vw - 48px));max-height:calc(100vh - 48px)}.product-photo img{max-height:58vh}.product-info{padding:28px 32px 32px}.product-specs{grid-template-columns:repeat(2,minmax(0,1fr))}.product-specs span{display:grid;gap:4px}}
+
+ion-modal.qz-large-modal{--background:#fff;--width:80vw;--height:80vh;--border-radius:14px}ion-modal.qz-large-modal::part(content){background:#fff}@media (max-width:520px){ion-modal.qz-large-modal{--width:92vw;--height:80vh}}
+
+ion-modal.qz-large-modal{--width:100vw;--height:100vh;--border-radius:0}.artwork-viewer{place-items:center;align-items:center;padding:0}.artwork-sheet{width:90vw;max-height:90vh;border-radius:12px}.product-photo img{max-height:54vh}@media (min-width:760px){.artwork-sheet{width:90vw;max-height:90vh}.product-photo img{max-height:56vh}}

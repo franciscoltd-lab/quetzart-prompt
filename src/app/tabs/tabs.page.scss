@@ -1,0 +1,35 @@
+.qz-tabbar {
+  --background: #ffffff;
+  --border: 1px solid var(--qz-border);
+  height: 64px;
+  margin: 8px 12px 12px;
+  border: 1px solid var(--qz-border);
+  border-radius: 999px;
+  box-shadow: var(--qz-shadow);
+  background: #ffffff;
+  contain: none;
+}
+
+ion-tab-button {
+  --background: #ffffff;
+  --background-focused: #f7f7f7;
+  --background-focused-opacity: 1;
+  --color: var(--qz-text-soft);
+  --color-selected: var(--qz-text);
+  --ripple-color: var(--qz-border);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+:host {
+  background: #ffffff;
+}
+
+ion-tabs {
+  background: #ffffff;
+  --background: #ffffff;
+}
+
+ion-tab-bar::part(native) {
+  background: #ffffff;
+}
