@@ -1,12 +1,12 @@
-<ion-header class="qz-header">
-  <ion-toolbar class="qz-header">
-    <ion-title>Quetzart</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div class="qz-bg">
     <main class="home-wrap">
+      <ion-searchbar
+        class="home-search qz-input"
+        placeholder="Buscar..."
+        show-clear-button="never"
+        animated="false"></ion-searchbar>
+
       <section class="featured-section" *ngIf="featuredArtworks.length">
         <div class="featured-carousel" (scroll)="syncFeaturedIndex($event)">
           <button
@@ -30,10 +30,10 @@
 
       <section class="feed-section">
         <div class="section-head">
-          <div>
+          <button type="button" class="section-link" (click)="openArtistsList()">
             <h2>Artistas</h2>
-          </div>
-          <ion-button class="text-link" fill="clear" size="small" (click)="openArtistsList()">Ver todos</ion-button>
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
         </div>
 
         <div
@@ -63,10 +63,10 @@
 
       <section class="feed-section">
         <div class="section-head">
-          <div>
+          <button type="button" class="section-link" (click)="openEstablishmentsList()">
             <h2>Establecimientos</h2>
-          </div>
-          <ion-button class="text-link" fill="clear" size="small" (click)="openEstablishmentsList()">Ver todos</ion-button>
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
         </div>
 
         <div

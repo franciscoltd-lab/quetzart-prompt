@@ -1,0 +1,141 @@
+.artwork-detail {
+  min-height: 100%;
+  padding: 18px 14px 34px;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  background: #fff;
+}
+
+.detail-close {
+  justify-self: end;
+  width: 34px;
+  height: 34px;
+  margin-bottom: -4px;
+  --padding-start: 0;
+  --padding-end: 0;
+  --color: #000;
+}
+
+.detail-image {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 4px;
+  background: var(--qz-surface-2);
+  cursor: zoom-in;
+}
+
+.detail-image img {
+  width: 100%;
+  height: min(56vh, 430px);
+  display: block;
+  object-fit: cover;
+  transition: transform 180ms ease;
+}
+
+.detail-image.zoomed {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 0;
+  background: rgb(0 0 0 / 92%);
+  cursor: zoom-out;
+}
+
+.detail-image.zoomed img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.detail-image span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 82%);
+  color: #000;
+}
+
+.detail-info {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-kicker {
+  margin: 0 0 8px;
+  color: var(--qz-text-dim);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.detail-info h1 {
+  margin: 0;
+  font-size: clamp(24px, 7vw, 36px);
+  font-weight: 300;
+  line-height: 1.08;
+}
+
+.detail-description {
+  margin: 0;
+  color: var(--qz-text);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.detail-meta {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  color: #000;
+  font-size: 12px;
+}
+
+.detail-meta div {
+  display: flex;
+  gap: 5px;
+}
+
+.detail-meta dt,
+.detail-meta dd {
+  margin: 0;
+}
+
+.detail-meta dt {
+  color: var(--qz-text-dim);
+}
+
+.favorite-btn {
+  margin-top: 16px;
+  --background: #ffe88a;
+  --background-activated: #f4dc74;
+  --background-hover: #ffed9b;
+  --border-color: #ffe88a;
+  --color: #000;
+}
+
+.buy-btn,
+.favorite-btn {
+  min-height: 40px;
+  font-size: 12px;
+}
+
+@media (min-width: 720px) {
+  .artwork-detail {
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: 22px 18px 40px;
+  }
+}

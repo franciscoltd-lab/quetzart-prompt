@@ -1,15 +1,10 @@
-<ion-header class="qz-header">
-  <ion-toolbar class="qz-header">
-    <ion-title>{{ artist?.display_name || 'Artista' }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="dismiss()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div class="qz-bg">
     <main class="artist-detail">
+      <ion-button fill="clear" class="modal-close" (click)="dismiss()" aria-label="Cerrar">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+
       <div class="state" *ngIf="loading">Cargando...</div>
 
       <ng-container *ngIf="!loading && artist">

@@ -12,9 +12,9 @@
 }
 
 .block-title {
-  font-weight: 850;
+  font-weight: 700;
   font-size: 15px;
-  letter-spacing: -0.15px;
+  letter-spacing: 0;
 }
 
 .avatar-row {
@@ -26,28 +26,30 @@
 .avatar {
   width: 64px;
   height: 64px;
-  border-radius: 18px;
+  border-radius: var(--qz-radius);
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--qz-border);
+  background: var(--qz-surface-2);
 }
 
 .item {
-  --background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 16px;
+  --background: #ffffff;
+  --color: #000000;
+  --placeholder-color: var(--qz-text-soft);
+  border: 1px solid var(--qz-border);
+  border-radius: var(--qz-radius);
   margin-top: 6px;
 }
 
 .err {
   margin-top: -2px;
   font-size: 12px;
-  color: rgba(255, 120, 120, 0.95);
+  color: #000000;
 }
 
 .hint {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.60);
+  color: var(--qz-text-dim);
 }
 
 .row {
@@ -58,9 +60,9 @@
 
 .thumb {
   position: relative;
-  border-radius: 14px;
+  border-radius: var(--qz-radius);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid var(--qz-border);
   aspect-ratio: 1 / 1;
   /* cuadrado perfecto */
 }

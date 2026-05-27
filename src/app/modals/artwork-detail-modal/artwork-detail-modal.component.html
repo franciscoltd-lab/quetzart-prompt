@@ -1,29 +1,44 @@
-<ion-header class="qz-header">
-  <ion-toolbar class="qz-header">
-    <ion-title>Obra</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div class="qz-bg">
-    <div style="padding:16px; display:grid; gap:14px;">
-      <div class="qz-glass" style="overflow:hidden;">
-        <img [src]="artwork?.image_url" style="width:100%; height: 360px; object-fit:cover;" />
+  <main class="artwork-detail">
+    <ion-button class="detail-close" fill="clear" (click)="dismiss()" aria-label="Cerrar">
+      <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+
+    <button type="button" class="detail-image" (click)="toggleZoom($event)" [class.zoomed]="imageZoomed">
+      <img [src]="artwork?.image_url" [alt]="artwork?.title || 'Obra'" />
+      <span>
+        <ion-icon name="expand-outline"></ion-icon>
+      </span>
+    </button>
+
+    <section class="detail-info">
+      <div>
+        <p class="detail-kicker">{{ artwork?.artist || 'Quetzart' }}</p>
+        <h1>{{ artwork?.title || 'Obra' }}</h1>
       </div>
 
-      <div class="qz-glass" style="padding:14px;">
-        <div style="font-weight:800; font-size:18px;">{{artwork?.title}}</div>
-        <div style="color: var(--qz-text-dim); margin-top:4px;">{{artwork?.artist}}</div>
-        <div style="margin-top:10px;">{{artwork?.description}}</div>
+      <p class="detail-description">
+        {{ artwork?.description || 'Pieza disponible dentro de Quetzart.' }}
+      </p>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
-          <div style="font-weight:800; font-size:18px;">${{artwork?.price}}</div>
-          <ion-button (click)="openBankInfo()">Comprar</ion-button>
+      <dl class="detail-meta">
+        <div>
+          <dt>Tecnica</dt>
+          <dd>{{ artwork?.technique || artwork?.artist || 'Tecnica mixta' }}</dd>
         </div>
-      </div>
-    </div>
-  </div>
+        <div>
+          <dt>Anio</dt>
+          <dd>{{ artwork?.year || '2026' }}</dd>
+        </div>
+      </dl>
+
+      <ion-button expand="block" fill="outline" class="favorite-btn">
+        Anadir a Favoritos
+      </ion-button>
+
+      <ion-button expand="block" class="buy-btn" (click)="openBankInfo()">
+        Comprar
+      </ion-button>
+    </section>
+  </main>
 </ion-content>

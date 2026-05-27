@@ -1,18 +1,10 @@
-<ion-header class="qz-header">
-  <ion-toolbar class="qz-header">
-    <ion-title>Perfil</ion-title>
-
-    <ion-buttons slot="end" *ngIf="auth.isLoggedIn()">
-      <ion-button (click)="logout()" aria-label="Cerrar sesion">
-        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div class="qz-bg">
     <main class="profile-wrap">
+      <ion-button class="profile-logout" fill="clear" *ngIf="auth.isLoggedIn()" (click)="logout()" aria-label="Cerrar sesion">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+
       <ng-container *ngIf="!auth.isLoggedIn(); else loggedTemplate">
         <section class="welcome-panel">
           <p class="eyebrow">Quetzart</p>
@@ -29,65 +21,64 @@
       <ng-template #loggedTemplate>
         <ng-container *ngIf="(profile$ | async) as p; else noProfile">
           <section class="profile-hero">
-            <button
-              type="button"
-              class="avatar-wrap"
-              (click)="openImage(p.profileImage || 'assets/avatar-placeholder.png', p.displayName)">
-              <img class="avatar" [src]="p.profileImage || 'assets/avatar-placeholder.png'" [alt]="p.displayName" />
-              <span class="view-hint">
-                <ion-icon name="expand-outline"></ion-icon>
-              </span>
-            </button>
+            <div class="profile-topline">
+              <h1>{{ p.displayName }}</h1>
+              <ion-button size="small" fill="clear" (click)="editName(p)" aria-label="Editar nombre">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
 
-            <div class="info">
-              <div class="name-row">
-                <div>
-                  <p class="eyebrow">{{ roleLabel(p) }}</p>
-                  <h1>{{ p.displayName }}</h1>
+            <div class="profile-intro">
+              <button
+                type="button"
+                class="avatar-wrap"
+                (click)="openImage(p.profileImage || 'assets/avatar-placeholder.png', p.displayName)">
+                <img class="avatar" [src]="p.profileImage || 'assets/avatar-placeholder.png'" [alt]="p.displayName" />
+              </button>
+
+              <div class="profile-copy">
+                <p class="bio">
+                  {{ p.role === 'artist' ? (p.bio || 'Sin descripcion') : (categoryOrStyle(p) || 'Sin descripcion') }}
+                </p>
+                <div class="profile-actions">
+                  <ion-button fill="clear" size="small" (click)="changeProfileImage(p)">
+                    <ion-icon name="camera-outline" slot="start"></ion-icon>
+                    Foto
+                  </ion-button>
+                  <ion-button fill="clear" size="small" (click)="editCategoryOrStyle(p)">
+                    <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+                    {{ p.role === 'artist' ? 'Estilo' : 'Categoria' }}
+                  </ion-button>
+                  <ion-button fill="clear" size="small" *ngIf="p.role === 'artist'" (click)="editBio(p)">
+                    <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                    Bio
+                  </ion-button>
                 </div>
-                <ion-button size="small" fill="clear" (click)="editName(p)" aria-label="Editar nombre">
-                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-                </ion-button>
               </div>
+            </div>
 
-              <div class="meta">
-                <span class="qz-pill">{{ categoryOrStyle(p) }}</span>
-              </div>
-
-              <div class="profile-stats">
-                <span><strong>{{ p.gallery.length }}</strong> fotos</span>
-                <span><strong>{{ roleLabel(p) }}</strong></span>
-              </div>
-
-              <p class="bio" *ngIf="p.role === 'artist'">{{ p.bio || 'Sin descripcion' }}</p>
-
-              <div class="profile-actions">
-                <ion-button fill="outline" size="small" (click)="changeProfileImage(p)">
-                  <ion-icon name="camera-outline" slot="start"></ion-icon>
-                  Foto
-                </ion-button>
-                <ion-button fill="outline" size="small" (click)="editCategoryOrStyle(p)">
-                  <ion-icon name="pricetag-outline" slot="start"></ion-icon>
-                  {{ p.role === 'artist' ? 'Estilo' : 'Categoria' }}
-                </ion-button>
-                <ion-button fill="outline" size="small" *ngIf="p.role === 'artist'" (click)="editBio(p)">
-                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
-                  Bio
-                </ion-button>
-              </div>
+            <div class="profile-meta-row">
+              <span>{{ categoryOrStyle(p) }}</span>
+              <span>{{ p.gallery.length }} imagenes</span>
             </div>
           </section>
 
+          <section class="upload-section">
+            <div class="inline-head">
+              <h2>Obras Disponibles</h2>
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </div>
+
+            <button type="button" class="upload-box" (click)="addPhotos(p)">
+              <ion-icon name="cloud-upload-outline"></ion-icon>
+              <span>Subir Imagenes</span>
+            </button>
+          </section>
+
           <section class="gallery-section">
-            <div class="section-head">
-              <div>
-                <h2>{{ p.role === 'artist' ? 'Portafolio' : 'Fotos del establecimiento' }}</h2>
-                <p>{{ p.gallery.length }} imagenes</p>
-              </div>
-              <ion-button size="small" (click)="addPhotos(p)">
-                <ion-icon name="add-outline" slot="start"></ion-icon>
-                Anadir
-              </ion-button>
+            <div class="inline-head">
+              <h2>Obras en exposicion</h2>
+              <ion-icon name="chevron-forward-outline"></ion-icon>
             </div>
 
             <div class="gallery-grid" *ngIf="p.gallery.length; else emptyGallery">
@@ -105,7 +96,7 @@
 
             <ng-template #emptyGallery>
               <div class="empty-gallery">
-                Aun no tienes imagenes. Presiona Anadir para construir tu portafolio.
+                Aun no tienes imagenes. Presiona Subir Imagenes para construir tu portafolio.
               </div>
             </ng-template>
           </section>

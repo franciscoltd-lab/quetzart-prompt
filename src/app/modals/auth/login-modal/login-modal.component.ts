@@ -6,11 +6,13 @@ import { ProfileStoreService } from '../../../core/services/profile-store.servic
 import { AppProfile } from '../../../core/models/profile.model';
 import { AuthApiService } from 'src/app/core/api/auth-api.service';
 import { normalizeImageUrl } from 'src/app/core/utils/image-url';
+import { AccountTypeModalComponent } from '../account-type-modal/account-type-modal.component';
 
 @Component({
   standalone: false,
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
+  styleUrls: ['./login-modal.component.scss'],
 })
 export class LoginModalComponent {
   email = '';
@@ -30,6 +32,15 @@ export class LoginModalComponent {
 
   dismiss() {
     this.modalCtrl.dismiss();
+  }
+
+  async openAccountType() {
+    const m = await this.modalCtrl.create({
+      component: AccountTypeModalComponent,
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+    await m.present();
   }
 
   login() {

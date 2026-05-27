@@ -6,13 +6,20 @@ import { BankInfoModalComponent } from '../bank-info-modal/bank-info-modal.compo
   standalone: false,
   selector: 'app-artwork-detail-modal',
   templateUrl: './artwork-detail-modal.component.html',
+  styleUrls: ['./artwork-detail-modal.component.scss'],
 })
 export class ArtworkDetailModalComponent {
   @Input() artwork: any;
+  imageZoomed = false;
 
   constructor(private modalCtrl: ModalController) {}
 
   dismiss() { this.modalCtrl.dismiss(); }
+
+  toggleZoom(event: Event) {
+    event.stopPropagation();
+    this.imageZoomed = !this.imageZoomed;
+  }
 
   async openBankInfo() {
     const m = await this.modalCtrl.create({ component: BankInfoModalComponent });

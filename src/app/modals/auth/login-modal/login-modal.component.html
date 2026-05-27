@@ -1,75 +1,93 @@
-<ion-header class="qz-header">
-  <ion-toolbar class="qz-header">
-    <ion-title>Iniciar sesión</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="dismiss()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div class="qz-bg">
-    <div style="padding:16px; display:grid; gap:12px;">
-      <div class="qz-glass" style="padding:14px; display:grid; gap:10px;">
-        <ion-item class="qz-glass" lines="none" *ngIf="resetStep === 'login'">
-          <ion-input label="Email" labelPlacement="stacked" type="email" [(ngModel)]="email"></ion-input>
+  <main class="auth-screen">
+    <ion-button class="auth-close" fill="clear" (click)="dismiss()" aria-label="Cerrar">
+      <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+
+    <section class="auth-panel">
+      <h1>QUETZART</h1>
+
+      <ng-container *ngIf="resetStep === 'login'">
+        <div class="auth-copy">
+          <h2>Crea una cuenta</h2>
+          <p>Ingresa tu correo para registrarte o iniciar sesion en esta app.</p>
+        </div>
+
+        <ion-item class="auth-item" lines="none">
+          <ion-input type="email" placeholder="email@dominio.com" [(ngModel)]="email"></ion-input>
         </ion-item>
 
-        <ion-item class="qz-glass" lines="none" *ngIf="resetStep === 'login'">
-          <ion-input label="Contraseña" labelPlacement="stacked" type="password" [(ngModel)]="password"></ion-input>
+        <ion-item class="auth-item" lines="none">
+          <ion-input type="password" placeholder="Contrasena" [(ngModel)]="password"></ion-input>
         </ion-item>
 
-        <ion-button expand="block" (click)="login()" [disabled]="loading || !email || !password" *ngIf="resetStep === 'login'">
-          {{ loading ? 'Entrando...' : 'Iniciar sesión' }}
+        <ion-button expand="block" class="auth-primary" (click)="login()" [disabled]="loading || !email || !password">
+          {{ loading ? 'Entrando...' : 'Continuar' }}
         </ion-button>
 
-        <ion-button expand="block" fill="clear" (click)="startPasswordReset()" *ngIf="resetStep === 'login'">
-          ¿Olvidaste tu contraseña?
+        <button type="button" class="auth-link" (click)="startPasswordReset()">Olvidaste tu contrasena</button>
+
+        <div class="auth-divider"><span></span><em>o</em><span></span></div>
+
+        <ion-button expand="block" fill="outline" class="auth-secondary" (click)="openAccountType()">
+          Crear cuenta nueva
         </ion-button>
 
-        <ng-container *ngIf="resetStep === 'email'">
-          <ion-item class="qz-glass" lines="none">
-            <ion-input label="Correo" labelPlacement="stacked" type="email" [(ngModel)]="email"></ion-input>
-          </ion-item>
+        <p class="auth-terms">
+          Haciendo click en continuar, aceptas nuestros Terminos de servicio y Politicas de Privacidad.
+        </p>
+      </ng-container>
 
-          <ion-button expand="block" (click)="requestPasswordReset()" [disabled]="loading || !email">
-            {{ loading ? 'Enviando...' : 'Enviar codigo' }}
-          </ion-button>
+      <ng-container *ngIf="resetStep === 'email'">
+        <div class="auth-copy">
+          <h2>Recupera tu cuenta</h2>
+          <p>Ingresa tu correo para recibir un codigo de recuperacion.</p>
+        </div>
 
-          <ion-button expand="block" fill="clear" (click)="backToLogin()" [disabled]="loading">
-            Volver a iniciar sesion
-          </ion-button>
-        </ng-container>
+        <ion-item class="auth-item" lines="none">
+          <ion-input type="email" placeholder="email@dominio.com" [(ngModel)]="email"></ion-input>
+        </ion-item>
 
-        <ng-container *ngIf="resetStep === 'code'">
-          <ion-item class="qz-glass" lines="none">
-            <ion-input label="Codigo" labelPlacement="stacked" inputmode="numeric" maxlength="6" [(ngModel)]="resetCode"></ion-input>
-          </ion-item>
+        <ion-button expand="block" class="auth-primary" (click)="requestPasswordReset()" [disabled]="loading || !email">
+          {{ loading ? 'Enviando...' : 'Enviar codigo' }}
+        </ion-button>
 
-          <ion-button expand="block" (click)="verifyPasswordResetCode()" [disabled]="loading || resetCode.length !== 6">
-            {{ loading ? 'Validando...' : 'Validar codigo' }}
-          </ion-button>
+        <button type="button" class="auth-link" (click)="backToLogin()" [disabled]="loading">Volver a iniciar sesion</button>
+      </ng-container>
 
-          <ion-button expand="block" fill="clear" (click)="requestPasswordReset()" [disabled]="loading || !email">
-            Reenviar codigo
-          </ion-button>
-        </ng-container>
+      <ng-container *ngIf="resetStep === 'code'">
+        <div class="auth-copy">
+          <h2>Codigo de verificacion</h2>
+          <p>Escribe el codigo de seis digitos que enviamos a tu correo.</p>
+        </div>
 
-        <ng-container *ngIf="resetStep === 'password'">
-          <ion-item class="qz-glass" lines="none">
-            <ion-input label="Nueva contrasena" labelPlacement="stacked" type="password" [(ngModel)]="newPassword"></ion-input>
-          </ion-item>
+        <ion-item class="auth-item" lines="none">
+          <ion-input placeholder="000000" inputmode="numeric" maxlength="6" [(ngModel)]="resetCode"></ion-input>
+        </ion-item>
 
-          <ion-button expand="block" (click)="confirmPasswordReset()" [disabled]="loading || newPassword.length < 8">
-            {{ loading ? 'Guardando...' : 'Cambiar contrasena' }}
-          </ion-button>
+        <ion-button expand="block" class="auth-primary" (click)="verifyPasswordResetCode()" [disabled]="loading || resetCode.length !== 6">
+          {{ loading ? 'Validando...' : 'Validar codigo' }}
+        </ion-button>
 
-          <ion-button expand="block" fill="clear" (click)="backToLogin()" [disabled]="loading">
-            Volver a iniciar sesion
-          </ion-button>
-        </ng-container>
+        <button type="button" class="auth-link" (click)="requestPasswordReset()" [disabled]="loading || !email">Reenviar codigo</button>
+      </ng-container>
 
-      </div>
-    </div>
-  </div>
+      <ng-container *ngIf="resetStep === 'password'">
+        <div class="auth-copy">
+          <h2>Nueva contrasena</h2>
+          <p>Elige una contrasena de al menos ocho caracteres.</p>
+        </div>
+
+        <ion-item class="auth-item" lines="none">
+          <ion-input type="password" placeholder="Nueva contrasena" [(ngModel)]="newPassword"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" class="auth-primary" (click)="confirmPasswordReset()" [disabled]="loading || newPassword.length < 8">
+          {{ loading ? 'Guardando...' : 'Cambiar contrasena' }}
+        </ion-button>
+
+        <button type="button" class="auth-link" (click)="backToLogin()" [disabled]="loading">Volver a iniciar sesion</button>
+      </ng-container>
+    </section>
+  </main>
 </ion-content>

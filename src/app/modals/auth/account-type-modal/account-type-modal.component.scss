@@ -7,27 +7,24 @@
 }
 
 .half {
-  border: 0;
-  border-radius: 22px;
+  border: 1px solid var(--qz-border);
+  border-radius: var(--qz-radius);
   overflow: hidden;
   position: relative;
-  color: white;
+  color: var(--qz-text);
   text-align: center;
-  font-weight: 900;
-  letter-spacing: 2px;
-  font-size: 18px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  font-weight: 700;
+  letter-spacing: 0;
+  font-size: 16px;
+  background: #ffffff;
 }
 
 .half.artist {
-  background-image: radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.55), transparent 60%);
+  background-image: none;
 }
 
 .half.est {
-  background-image: radial-gradient(circle at 80% 20%, rgba(0, 216, 255, 0.35), transparent 60%);
+  background-image: none;
 }
 
 .label {

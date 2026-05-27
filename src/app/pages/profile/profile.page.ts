@@ -80,8 +80,8 @@ export class ProfilePage {
   async openLogin() {
     const m = await this.modalCtrl.create({
       component: LoginModalComponent,
-      breakpoints: [0, 0.45, 0.9],
-      initialBreakpoint: 0.45,
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
     await m.present();
   }
