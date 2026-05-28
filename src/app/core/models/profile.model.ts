@@ -4,6 +4,7 @@ export type GalleryItem = {
   id: number;
   url: string;
   title?: string | null;
+  size?: string | null;
   technique?: string | null;
   price?: string | number | null;
   description?: string | null;

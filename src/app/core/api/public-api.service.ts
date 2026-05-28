@@ -8,11 +8,12 @@ export class PublicApiService {
 
     constructor(private http: HttpClient) { }
 
-    listArtists(search = '', page = 1, size = 20) {
+    listArtists(search = '', page = 1, size = 20, searchField = '') {
         let params = new HttpParams()
             .set('page', page)
             .set('size', size);
         if (search) params = params.set('search', search);
+        if (searchField) params = params.set('search_field', searchField);
         return this.http.get<any>(`${this.baseUrl}/public/artists`, { params });
     }
 
@@ -32,11 +33,20 @@ export class PublicApiService {
         return this.http.get<any>(`${this.baseUrl}/public/artworks`, { params });
     }
 
-    home(artistsSize = 10, establishmentsSize = 10, artworksSize = 10) {
+    listEvents(search = '', page = 1, size = 20) {
+        let params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+        if (search) params = params.set('search', search);
+        return this.http.get<any>(`${this.baseUrl}/public/events`, { params });
+    }
+
+    home(artistsSize = 10, establishmentsSize = 10, artworksSize = 10, eventsSize = 10) {
         const params = new HttpParams()
             .set('artists_size', artistsSize)
             .set('establishments_size', establishmentsSize)
-            .set('artworks_size', artworksSize);
+            .set('artworks_size', artworksSize)
+            .set('events_size', eventsSize);
 
         return this.http.get<any>(`${this.baseUrl}/public/home`, { params });
     }

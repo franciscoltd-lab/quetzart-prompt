@@ -5,7 +5,7 @@
   margin: 0 auto;
   padding: 30px 10px 0;
   display: grid;
-  grid-template-rows: auto 18dvh auto auto auto;
+  grid-template-rows: auto auto auto auto auto auto;
   gap: 14px;
 }
 
@@ -55,11 +55,36 @@
   font-size: 15px;
 }
 
-.featured-section,
+.featured-section {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(128px, 18dvh) auto;
+  gap: 7px;
+}
+
 .featured-carousel,
 .featured-card {
-  min-height: 0;
   height: 100%;
+  min-height: 128px;
+}
+
+.featured-meta {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 18px;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 14px;
+  opacity: .9;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.featured-card .featured-title {
+  bottom: 34px;
 }
 
 
@@ -144,7 +169,7 @@
 @media (min-width: 1024px) {
   .home-wrap {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto minmax(160px, 18vh) auto auto;
+    grid-template-rows: auto auto auto auto auto;
     column-gap: 24px;
     row-gap: 18px;
   }
@@ -153,5 +178,19 @@
   .featured-section,
   .bottom-space {
     grid-column: 1 / -1;
+  }
+
+  .artists-section {
+    grid-column: 1;
+  }
+
+  .artworks-section {
+    grid-column: 1;
+  }
+
+  .establishments-section {
+    grid-column: 2;
+    grid-row: 3 / span 2;
+    align-self: start;
   }
 }

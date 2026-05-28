@@ -23,12 +23,12 @@
 
       <dl class="detail-meta">
         <div>
-          <dt>Tecnica</dt>
-          <dd>{{ artwork?.technique || artwork?.artist || 'Tecnica mixta' }}</dd>
+          <dt>Tamano</dt>
+          <dd>{{ artwork?.size || 'No especificado' }}</dd>
         </div>
         <div>
-          <dt>Anio</dt>
-          <dd>{{ artwork?.year || '2026' }}</dd>
+          <dt>Precio</dt>
+          <dd>{{ artwork?.price ? ('$' + artwork.price) : 'A consultar' }}</dd>
         </div>
       </dl>
 

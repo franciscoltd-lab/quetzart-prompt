@@ -26,6 +26,15 @@ export class ProfilePage {
   selectedArtwork: GalleryItem | null = null;
   selectedArtworkOwner = '';
   selectedArtworkKind = 'Obra';
+  editingArtworkId: number | null = null;
+  artworkImagePreview: string | null = null;
+  artworkForm = {
+    title: '',
+    size: '',
+    price: null as number | null,
+    description: '',
+    image_base64: '',
+  };
 
   constructor(
     public auth: AuthService,
@@ -67,6 +76,7 @@ export class ProfilePage {
             title: g.title ?? null,
             technique: g.technique ?? g.tecnica ?? null,
             price: g.price ?? g.precio ?? null,
+            size: g.size ?? g.tamano ?? null,
             description: g.description ?? g.caption ?? null,
           })),
         };
@@ -129,8 +139,9 @@ export class ProfilePage {
     this.selectedArtwork = {
       ...item,
       title: item.title || 'Sin titulo',
+      size: item.size || null,
       technique: item.technique || this.defaultTechnique(p),
-      price: item.price || 'Precio a consultar',
+      price: item.price ?? 'Precio a consultar',
       description: item.description || this.defaultArtworkDescription(p),
     };
     this.selectedArtworkOwner = p.displayName;
@@ -323,11 +334,103 @@ export class ProfilePage {
     });
   }
 
+  async pickArtworkImage() {
+    const dataUrl = await this.photo.pickSingleBase64();
+    if (!dataUrl) return;
+
+    this.artworkForm.image_base64 = dataUrl;
+    this.artworkImagePreview = dataUrl;
+  }
+
+  editArtwork(item: GalleryItem) {
+    this.editingArtworkId = item.id;
+    this.artworkImagePreview = item.url;
+    this.artworkForm = {
+      title: item.title || '',
+      size: item.size || '',
+      price: item.price === null || item.price === undefined ? null : Number(item.price),
+      description: item.description || '',
+      image_base64: '',
+    };
+  }
+
+  cancelArtworkEdit() {
+    this.resetArtworkForm();
+  }
+
+  async saveArtwork(p: AppProfile) {
+    if (p.role !== 'artist') return;
+
+    const title = this.artworkForm.title.trim();
+    if (!title) {
+      return this.showToast('Agrega el nombre de la obra.');
+    }
+
+    if (!this.editingArtworkId && !this.artworkForm.image_base64) {
+      return this.showToast('Agrega una imagen de la obra.');
+    }
+
+    const payload: any = {
+      title,
+      size: this.artworkForm.size.trim() || null,
+      price: this.artworkForm.price === null || this.artworkForm.price === undefined || this.artworkForm.price === ('' as any)
+        ? null
+        : Number(this.artworkForm.price),
+      description: this.artworkForm.description.trim() || null,
+    };
+
+    if (this.artworkForm.image_base64) {
+      payload.image_base64 = this.artworkForm.image_base64;
+    }
+
+    const wasEditing = Boolean(this.editingArtworkId);
+    const request$ = this.editingArtworkId
+      ? this.authApi.updateArtwork(this.editingArtworkId, payload)
+      : this.authApi.createArtwork(payload);
+
+    request$.subscribe({
+      next: async () => {
+        this.resetArtworkForm();
+        this.reloadMe();
+        await this.showToast(wasEditing ? 'Obra actualizada.' : 'Obra agregada.');
+      },
+      error: async (e) => {
+        console.error('saveArtwork error', e);
+        await this.showToast('No se pudo guardar la obra.');
+      },
+    });
+  }
+
+  private resetArtworkForm() {
+    this.editingArtworkId = null;
+    this.artworkImagePreview = null;
+    this.artworkForm = {
+      title: '',
+      size: '',
+      price: null,
+      description: '',
+      image_base64: '',
+    };
+  }
+
+  private async showToast(message: string) {
+    const t = await this.toastCtrl.create({
+      message,
+      duration: 1300,
+      position: 'bottom',
+    });
+    await t.present();
+  }
+
   removePhoto(p: AppProfile, idx: number) {
     const item = p.gallery[idx];
     if (!item?.id) return;
 
-    this.authApi.deleteGalleryItem(item.id).subscribe({
+    const request$ = p.role === 'artist'
+      ? this.authApi.deleteArtwork(item.id)
+      : this.authApi.deleteGalleryItem(item.id);
+
+    request$.subscribe({
       next: () => this.reloadMe(),
       error: (e) => console.error('deleteGalleryItem error', e),
     });

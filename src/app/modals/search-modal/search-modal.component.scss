@@ -1,0 +1,132 @@
+.search-modal {
+  width: min(900px, 100%);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 16px 12px 32px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.search-bar-row {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0 8px;
+  background: #ffffff;
+}
+
+:host ::ng-deep ion-searchbar.qz-input {
+  padding: 0;
+}
+
+.state {
+  padding: 18px;
+  border: 1px dashed var(--qz-border);
+  border-radius: 8px;
+  color: var(--qz-text-dim);
+  font-size: 14px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 2px;
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 7px 11px;
+  border: 1px solid var(--qz-border);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--qz-text-dim);
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.filter-chip.active {
+  border-color: #111111;
+  background: #111111;
+  color: #ffffff;
+}
+
+.results {
+  display: grid;
+  gap: 8px;
+}
+
+.result-row {
+  width: 100%;
+  min-height: 76px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 58px 1fr 20px;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--qz-border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--qz-text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.result-row img {
+  width: 58px;
+  height: 58px;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--qz-surface-2);
+}
+
+.result-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.result-copy small,
+.result-copy strong,
+.result-copy em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-copy small {
+  color: var(--qz-text-soft);
+  font-size: 10px;
+  font-style: normal;
+  line-height: 12px;
+}
+
+.result-copy strong {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.result-copy em {
+  color: var(--qz-text-dim);
+  font-size: 12px;
+  font-style: normal;
+  line-height: 15px;
+}
+
+.result-row ion-icon {
+  color: var(--qz-text-soft);
+}

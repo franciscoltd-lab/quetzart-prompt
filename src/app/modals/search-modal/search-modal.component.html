@@ -1,0 +1,53 @@
+<ion-content>
+  <div class="qz-bg">
+    <main class="search-modal">
+      <div class="search-bar-row">
+        <ion-searchbar
+          class="qz-input"
+          placeholder="Buscar artistas, obras, eventos o establecimientos"
+          [value]="query"
+          debounce="280"
+          autofocus="true"
+          show-clear-button="focus"
+          (ionInput)="onSearchChange($event)">
+        </ion-searchbar>
+
+        <ion-button fill="clear" size="small" (click)="dismiss()">Cerrar</ion-button>
+      </div>
+
+      <div class="filter-row" aria-label="Filtros de busqueda">
+        <button
+          type="button"
+          class="filter-chip"
+          *ngFor="let filter of filters"
+          [class.active]="filter.key === activeFilter"
+          (click)="setFilter(filter.key)">
+          {{ filter.label }}
+        </button>
+      </div>
+
+      <div class="state" *ngIf="!query">Elige un filtro y busca por texto.</div>
+      <div class="state" *ngIf="query && query.length < 2">Escribe al menos 2 caracteres.</div>
+      <div class="state" *ngIf="loading">Buscando...</div>
+      <div class="state" *ngIf="searched && !loading && !results.length">No se encontraron resultados.</div>
+
+      <section class="results" *ngIf="results.length">
+        <button
+          type="button"
+          class="result-row"
+          *ngFor="let result of results; trackBy: trackByResult"
+          (click)="openResult(result)">
+          <img [src]="result.imageUrl" [alt]="result.title" />
+
+          <span class="result-copy">
+            <small>{{ labelFor(result.type) }}</small>
+            <strong>{{ result.title }}</strong>
+            <em>{{ result.subtitle }}</em>
+          </span>
+
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </section>
+    </main>
+  </div>
+</ion-content>

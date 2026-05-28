@@ -65,14 +65,64 @@
 
           <section class="upload-section">
             <div class="inline-head">
-              <h2>Obras Disponibles</h2>
+              <h2>{{ p.role === 'artist' ? 'Agregar obra' : 'Fotos del establecimiento' }}</h2>
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </div>
 
-            <button type="button" class="upload-box" (click)="addPhotos(p)">
+            <form class="artwork-form" *ngIf="p.role === 'artist'; else establishmentUpload" (ngSubmit)="saveArtwork(p)">
+              <button type="button" class="upload-box artwork-image-picker" (click)="pickArtworkImage()">
+                <img *ngIf="artworkImagePreview" [src]="artworkImagePreview" alt="Vista previa de obra" />
+                <ng-container *ngIf="!artworkImagePreview">
+                  <ion-icon name="image-outline"></ion-icon>
+                  <span>Imagen de la obra</span>
+                </ng-container>
+              </button>
+
+              <label>
+                <span>Nombre</span>
+                <ion-input class="qz-input" name="title" [(ngModel)]="artworkForm.title" placeholder="Ej. Luz interior"></ion-input>
+              </label>
+
+              <div class="form-grid">
+                <label>
+                  <span>Tamano</span>
+                  <ion-input class="qz-input" name="size" [(ngModel)]="artworkForm.size" placeholder="Ej. 60 x 80 cm"></ion-input>
+                </label>
+
+                <label>
+                  <span>Precio</span>
+                  <ion-input class="qz-input" name="price" type="number" min="0" [(ngModel)]="artworkForm.price" placeholder="MXN"></ion-input>
+                </label>
+              </div>
+
+              <label>
+                <span>Descripcion</span>
+                <ion-textarea
+                  class="qz-input"
+                  name="description"
+                  [(ngModel)]="artworkForm.description"
+                  auto-grow="true"
+                  placeholder="Detalles, materiales o historia de la pieza">
+                </ion-textarea>
+              </label>
+
+              <div class="form-actions">
+                <ion-button type="submit" size="small">
+                  <ion-icon name="save-outline" slot="start"></ion-icon>
+                  {{ editingArtworkId ? 'Guardar cambios' : 'Agregar obra' }}
+                </ion-button>
+                <ion-button type="button" size="small" fill="clear" *ngIf="editingArtworkId" (click)="cancelArtworkEdit()">
+                  Cancelar
+                </ion-button>
+              </div>
+            </form>
+
+            <ng-template #establishmentUpload>
+              <button type="button" class="upload-box" (click)="addPhotos(p)">
               <ion-icon name="cloud-upload-outline"></ion-icon>
               <span>Subir Imagenes</span>
-            </button>
+              </button>
+            </ng-template>
           </section>
 
           <section class="gallery-section">
@@ -88,8 +138,13 @@
                 *ngFor="let img of p.gallery; let i = index"
                 (click)="openArtwork(img, p, i)">
                 <img [src]="img.url" alt="Imagen de galeria" />
+                <span class="gallery-title">{{ img.title || 'Sin titulo' }}</span>
+                <span class="gallery-meta">{{ img.size || categoryOrStyle(p) }}</span>
                 <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i); $event.stopPropagation()" aria-label="Eliminar foto">
                   <ion-icon name="close-circle"></ion-icon>
+                </ion-button>
+                <ion-button class="edit" size="small" fill="clear" *ngIf="p.role === 'artist'" (click)="editArtwork(img); $event.stopPropagation()" aria-label="Editar obra">
+                  <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
               </button>
             </div>
@@ -138,7 +193,7 @@
           <h2>{{ selectedArtwork.title }}</h2>
           <p class="product-owner">{{ selectedArtworkOwner }}</p>
           <div class="product-specs">
-            <span>Tecnica: <strong>{{ selectedArtwork.technique }}</strong></span>
+            <span>Tamano: <strong>{{ selectedArtwork.size || 'No especificado' }}</strong></span>
             <span>Precio: <strong>{{ selectedArtwork.price }}</strong></span>
           </div>
           <p class="product-description">{{ selectedArtwork.description }}</p>

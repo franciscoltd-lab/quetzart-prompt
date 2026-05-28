@@ -62,7 +62,7 @@ export class ArtistDetailModalComponent implements OnInit {
     this.selectedArtwork = {
       image_url: item.image_url,
       title: item.title || 'Sin titulo',
-      technique: item.technique || item.tecnica || this.artist?.artistic_style || 'Tecnica no especificada',
+      size: item.size || item.tamano || 'No especificado',
       price: item.price || item.precio || 'Precio a consultar',
       description: item.description || item.caption || this.artist?.bio || `Obra del portafolio de ${this.artist?.display_name}.`,
     };

@@ -5,30 +5,44 @@
         class="home-search qz-input"
         placeholder="Buscar..."
         show-clear-button="never"
-        animated="false"></ion-searchbar>
+        readonly="true"
+        animated="false"
+        (click)="openSearchModal()"></ion-searchbar>
 
-      <section class="featured-section" *ngIf="featuredArtworks.length">
-        <div class="featured-carousel" (scroll)="syncFeaturedIndex($event)">
-          <button
-            type="button"
-            class="featured-card"
-            *ngFor="let artwork of featuredArtworks; trackBy: trackById"
-            (click)="openArtwork(artwork)">
-            <img [src]="artwork.image_url" [alt]="artwork.title" />
-            <span class="featured-shade"></span>
-            <span class="featured-label">Obras</span>
-            <span class="featured-title">{{ artwork.title }}</span>
+      <section class="featured-section events-section">
+        <div class="section-head">
+          <button type="button" class="section-link">
+            <h2>Eventos</h2>
+            <ion-icon name="chevron-forward-outline"></ion-icon>
           </button>
         </div>
 
-        <div class="featured-dots" *ngIf="featuredArtworks.length > 1" aria-hidden="true">
+        <div class="featured-carousel" *ngIf="featuredEvents.length; else emptyEvents" (scroll)="syncFeaturedIndex($event)">
+          <button
+            type="button"
+            class="featured-card"
+            *ngFor="let event of featuredEvents; trackBy: trackById"
+            (click)="openEvent(event)">
+            <img [src]="event.image_url" [alt]="event.title" />
+            <span class="featured-shade"></span>
+            <span class="featured-label">Eventos</span>
+            <span class="featured-title">{{ event.title }}</span>
+            <span class="featured-meta">{{ event.establishment }}</span>
+          </button>
+        </div>
+
+        <div class="featured-dots" *ngIf="featuredEvents.length > 1" aria-hidden="true">
           <span
-            *ngFor="let artwork of featuredArtworks; let i = index; trackBy: trackById"
+            *ngFor="let event of featuredEvents; let i = index; trackBy: trackById"
             [class.active]="i === activeFeaturedIndex"></span>
         </div>
+
+        <ng-template #emptyEvents>
+          <div class="empty-state">Aun no hay eventos para mostrar.</div>
+        </ng-template>
       </section>
 
-      <section class="feed-section">
+      <section class="feed-section artists-section">
         <div class="section-head">
           <button type="button" class="section-link" (click)="openArtistsList()">
             <h2>Artistas</h2>
@@ -61,7 +75,41 @@
         </ng-template>
       </section>
 
-      <section class="feed-section">
+      <section class="feed-section artworks-section">
+        <div class="section-head">
+          <button type="button" class="section-link">
+            <h2>Obras</h2>
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div
+          class="establishment-carousel drag-carousel"
+          *ngIf="featuredArtworks.length; else emptyArtworks"
+          (pointerdown)="startCarouselDrag($event)"
+          (pointermove)="moveCarouselDrag($event)"
+          (pointerup)="endCarouselDrag($event)"
+          (pointercancel)="endCarouselDrag($event)">
+          <div
+            class="establishment-slide"
+            *ngFor="let artwork of featuredArtworks; trackBy: trackById">
+            <button
+              type="button"
+              class="establishment-card"
+              (click)="openArtwork(artwork)">
+              <img [src]="artwork.image_url" [alt]="artwork.title" />
+              <span class="establishment-category">{{ artwork.artist || 'Artista' }}</span>
+              <span class="establishment-name">{{ artwork.title }}</span>
+            </button>
+          </div>
+        </div>
+
+        <ng-template #emptyArtworks>
+          <div class="empty-state">Aun no hay obras para mostrar.</div>
+        </ng-template>
+      </section>
+
+      <section class="feed-section establishments-section">
         <div class="section-head">
           <button type="button" class="section-link" (click)="openEstablishmentsList()">
             <h2>Establecimientos</h2>

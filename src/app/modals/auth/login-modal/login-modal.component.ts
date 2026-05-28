@@ -80,6 +80,7 @@ export class LoginModalComponent {
                 id: g.id,
                 url: normalizeImageUrl(g.image_url ?? g.imageUrl) || 'assets/avatar-placeholder.png',
                 title: g.title ?? null,
+                size: g.size ?? g.tamano ?? null,
                 technique: g.technique ?? g.tecnica ?? null,
                 price: g.price ?? g.precio ?? null,
                 description: g.description ?? g.caption ?? null,

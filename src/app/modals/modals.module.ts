@@ -15,6 +15,7 @@ import { RegisterArtistModalComponent } from './auth/register-artist-modal/regis
 import { RegisterEstablishmentModalComponent } from './auth/register-establishment-modal/register-establishment-modal.component';
 import { EditTextModalComponent } from './common/edit-text-modal/edit-text-modal.component';
 import { ArtistDetailModalComponent } from './artist-detail-modal/artist-detail-modal.component';
+import { SearchModalComponent } from './search-modal/search-modal.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ArtistDetailModalComponent } from './artist-detail-modal/artist-detail-
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
     EditTextModalComponent,
-    ArtistDetailModalComponent
+    ArtistDetailModalComponent,
+    SearchModalComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,8 @@ import { ArtistDetailModalComponent } from './artist-detail-modal/artist-detail-
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
     EditTextModalComponent,
-    ArtistDetailModalComponent
+    ArtistDetailModalComponent,
+    SearchModalComponent
   ],
 })
 export class ModalsModule {}

@@ -79,4 +79,20 @@ export class AuthApiService {
         return this.http.delete<any>(`${this.baseUrl}/profile/me/gallery/${galleryId}`);
     }
 
+    listArtworks() {
+        return this.http.get<any[]>(`${this.baseUrl}/profile/me/artworks`);
+    }
+
+    createArtwork(payload: any) {
+        return this.http.post<any>(`${this.baseUrl}/profile/me/artworks`, payload);
+    }
+
+    updateArtwork(artworkId: number, payload: any) {
+        return this.http.patch<any>(`${this.baseUrl}/profile/me/artworks/${artworkId}`, payload);
+    }
+
+    deleteArtwork(artworkId: number) {
+        return this.http.delete<any>(`${this.baseUrl}/profile/me/artworks/${artworkId}`);
+    }
+
 }

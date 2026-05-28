@@ -6,6 +6,7 @@ import { EstablishmentListModalComponent } from '../../modals/establishment-list
 import { ArtistDetailModalComponent } from '../../modals/artist-detail-modal/artist-detail-modal.component';
 import { EstablishmentDetailModalComponent } from '../../modals/establishment-detail-modal/establishment-detail-modal.component';
 import { ArtworkDetailModalComponent } from '../../modals/artwork-detail-modal/artwork-detail-modal.component';
+import { SearchModalComponent } from '../../modals/search-modal/search-modal.component';
 import { PublicApiService } from 'src/app/core/api/public-api.service';
 import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 
@@ -17,6 +18,7 @@ import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 })
 export class HomePage {
   artists: any[] = [];
+  featuredEvents: any[] = [];
   featuredArtworks: any[] = [];
   activeFeaturedIndex = 0;
   establishments: any[] = [];
@@ -69,17 +71,38 @@ export class HomePage {
     this.publicApi.listArtworks('', 1, 20).subscribe({
       next: (r) => {
         const items = r?.items ?? r ?? [];
-        this.featuredArtworks = this.shuffle(items).slice(0, 5).map((a: any) => ({
-          id: a.id,
+        this.featuredArtworks = items.map((a: any) => ({
+          id: a.gallery_id ?? a.id,
           title: a.title ?? a.nombre ?? 'Obra',
           artist: a.artist ?? a.artist_name ?? a.artistName ?? a.display_name ?? '',
           description: a.description ?? a.descripcion ?? '',
           price: a.price ?? a.precio ?? null,
+          size: a.size ?? a.tamano ?? null,
           image_url: normalizeImageUrl(a.image_url ?? a.imageUrl ?? a.photo_url ?? a.photoUrl) || 'assets/avatar-placeholder.png',
+        }));
+      },
+      error: (err) => console.error('listArtworks error', err),
+    });
+
+    this.publicApi.listEvents('', 1, 8).subscribe({
+      next: (r) => {
+        const items = r?.items ?? r ?? [];
+        this.featuredEvents = items.map((event: any) => ({
+          id: event.id,
+          title: event.title ?? 'Evento',
+          establishment: event.establishment_name ?? event.establishmentName ?? '',
+          establishment_id: event.establishment_id ?? event.establishmentId,
+          description: event.description ?? '',
+          location: event.location ?? '',
+          starts_at: event.starts_at ?? event.startsAt,
+          image_url:
+            normalizeImageUrl(event.image_url ?? event.imageUrl) ||
+            normalizeImageUrl(event.establishment_image_url ?? event.establishmentImageUrl) ||
+            'assets/avatar-placeholder.png',
         }));
         this.activeFeaturedIndex = 0;
       },
-      error: (err) => console.error('listArtworks error', err),
+      error: (err) => console.error('listEvents error', err),
     });
   }
 
@@ -94,7 +117,7 @@ export class HomePage {
   syncFeaturedIndex(event: Event) {
     const el = event.target as HTMLElement;
     const index = Math.round(el.scrollLeft / el.clientWidth);
-    this.activeFeaturedIndex = Math.max(0, Math.min(index, this.featuredArtworks.length - 1));
+    this.activeFeaturedIndex = Math.max(0, Math.min(index, this.featuredEvents.length - 1));
   }
 
   startCarouselDrag(event: PointerEvent) {
@@ -165,6 +188,16 @@ export class HomePage {
     await m.present();
   }
 
+  async openSearchModal() {
+    const m = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      cssClass: 'qz-search-modal',
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
+    });
+    await m.present();
+  }
+
   async openArtist(artist: any) {
     if (!artist?.user_id) return;
 
@@ -191,6 +224,11 @@ export class HomePage {
       initialBreakpoint: 0.95,
     });
     await m.present();
+  }
+
+  async openEvent(event: any) {
+    if (!event?.establishment_id) return;
+    await this.openEstablishment({ user_id: event.establishment_id });
   }
 
   async openEstablishment(est: any) {
