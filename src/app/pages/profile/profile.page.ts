@@ -110,7 +110,12 @@ export class ProfilePage {
   }
 
   roleLabel(p: AppProfile) {
+    if (p.role === 'admin') return 'Admin';
     return p.role === 'artist' ? 'Artista' : 'Establecimiento';
+  }
+
+  isArtistProfile(p: AppProfile) {
+    return p.role === 'artist' || p.role === 'admin';
   }
 
   categoryOrStyle(p: AppProfile) {
@@ -145,7 +150,7 @@ export class ProfilePage {
       description: item.description || this.defaultArtworkDescription(p),
     };
     this.selectedArtworkOwner = p.displayName;
-    this.selectedArtworkKind = p.role === 'artist' ? 'Obra del portafolio' : 'Foto del establecimiento';
+    this.selectedArtworkKind = this.isArtistProfile(p) ? 'Obra del portafolio' : 'Foto del establecimiento';
   }
 
   closeArtwork() {
@@ -160,7 +165,7 @@ export class ProfilePage {
   }
 
   private defaultArtworkDescription(p: AppProfile) {
-    if (p.role === 'artist') {
+    if (this.isArtistProfile(p)) {
       return p.bio || `Pieza del portafolio de ${p.displayName}.`;
     }
 
@@ -169,7 +174,7 @@ export class ProfilePage {
   }
 
   private defaultTechnique(p: AppProfile) {
-    return p.role === 'artist' ? (p.artisticStyle || 'Tecnica no especificada') : (p.category || 'Espacio');
+    return this.isArtistProfile(p) ? (p.artisticStyle || 'Tecnica no especificada') : (p.category || 'Espacio');
   }
 
   async editName(p: AppProfile) {
@@ -227,7 +232,7 @@ export class ProfilePage {
   }
 
   async editBio(p: AppProfile) {
-    if (p.role !== 'artist') return;
+    if (!this.isArtistProfile(p)) return;
 
     const m = await this.modalCtrl.create({
       component: EditTextModalComponent,
@@ -270,7 +275,7 @@ export class ProfilePage {
   }
 
   async editCategoryOrStyle(p: AppProfile) {
-    const isArtist = p.role === 'artist';
+    const isArtist = this.isArtistProfile(p);
 
     const m = await this.modalCtrl.create({
       component: EditTextModalComponent,
@@ -359,7 +364,7 @@ export class ProfilePage {
   }
 
   async saveArtwork(p: AppProfile) {
-    if (p.role !== 'artist') return;
+    if (!this.isArtistProfile(p)) return;
 
     const title = this.artworkForm.title.trim();
     if (!title) {
@@ -426,7 +431,7 @@ export class ProfilePage {
     const item = p.gallery[idx];
     if (!item?.id) return;
 
-    const request$ = p.role === 'artist'
+    const request$ = this.isArtistProfile(p)
       ? this.authApi.deleteArtwork(item.id)
       : this.authApi.deleteGalleryItem(item.id);
 
@@ -436,3 +441,4 @@ export class ProfilePage {
     });
   }
 }
+

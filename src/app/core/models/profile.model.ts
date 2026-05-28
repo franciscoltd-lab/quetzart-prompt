@@ -1,4 +1,4 @@
-export type Role = 'artist' | 'establishment';
+export type Role = 'artist' | 'establishment' | 'admin';
 
 export type GalleryItem = {
   id: number;
@@ -11,7 +11,7 @@ export type GalleryItem = {
 };
 
 export interface AppProfile {
-  role: 'artist' | 'establishment';
+  role: Role;
   displayName: string;
   profileImage: string | null;
   lastNameChangeISO: string | null;

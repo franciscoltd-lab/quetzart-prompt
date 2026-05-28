@@ -38,7 +38,7 @@
 
               <div class="profile-copy">
                 <p class="bio">
-                  {{ p.role === 'artist' ? (p.bio || 'Sin descripcion') : (categoryOrStyle(p) || 'Sin descripcion') }}
+                  {{ isArtistProfile(p) ? (p.bio || 'Sin descripcion') : (categoryOrStyle(p) || 'Sin descripcion') }}
                 </p>
                 <div class="profile-actions">
                   <ion-button fill="clear" size="small" (click)="changeProfileImage(p)">
@@ -47,9 +47,9 @@
                   </ion-button>
                   <ion-button fill="clear" size="small" (click)="editCategoryOrStyle(p)">
                     <ion-icon name="pricetag-outline" slot="start"></ion-icon>
-                    {{ p.role === 'artist' ? 'Estilo' : 'Categoria' }}
+                    {{ isArtistProfile(p) ? 'Estilo' : 'Categoria' }}
                   </ion-button>
-                  <ion-button fill="clear" size="small" *ngIf="p.role === 'artist'" (click)="editBio(p)">
+                  <ion-button fill="clear" size="small" *ngIf="isArtistProfile(p)" (click)="editBio(p)">
                     <ion-icon name="document-text-outline" slot="start"></ion-icon>
                     Bio
                   </ion-button>
@@ -65,11 +65,11 @@
 
           <section class="upload-section">
             <div class="inline-head">
-              <h2>{{ p.role === 'artist' ? 'Agregar obra' : 'Fotos del establecimiento' }}</h2>
+              <h2>{{ isArtistProfile(p) ? 'Agregar obra' : 'Fotos del establecimiento' }}</h2>
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </div>
 
-            <form class="artwork-form" *ngIf="p.role === 'artist'; else establishmentUpload" (ngSubmit)="saveArtwork(p)">
+            <form class="artwork-form" *ngIf="isArtistProfile(p); else establishmentUpload" (ngSubmit)="saveArtwork(p)">
               <button type="button" class="upload-box artwork-image-picker" (click)="pickArtworkImage()">
                 <img *ngIf="artworkImagePreview" [src]="artworkImagePreview" alt="Vista previa de obra" />
                 <ng-container *ngIf="!artworkImagePreview">
@@ -143,7 +143,7 @@
                 <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i); $event.stopPropagation()" aria-label="Eliminar foto">
                   <ion-icon name="close-circle"></ion-icon>
                 </ion-button>
-                <ion-button class="edit" size="small" fill="clear" *ngIf="p.role === 'artist'" (click)="editArtwork(img); $event.stopPropagation()" aria-label="Editar obra">
+                <ion-button class="edit" size="small" fill="clear" *ngIf="isArtistProfile(p)" (click)="editArtwork(img); $event.stopPropagation()" aria-label="Editar obra">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
               </button>
@@ -213,3 +213,4 @@
     </div>
   </div>
 </ion-content>
+
