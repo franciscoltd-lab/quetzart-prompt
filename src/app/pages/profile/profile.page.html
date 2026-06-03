@@ -69,65 +69,24 @@
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </div>
 
-            <form class="artwork-form" *ngIf="isArtistProfile(p); else establishmentUpload" (ngSubmit)="saveArtwork(p)">
-              <button type="button" class="upload-box artwork-image-picker" (click)="pickArtworkImage()">
-                <img *ngIf="artworkImagePreview" [src]="artworkImagePreview" alt="Vista previa de obra" />
-                <ng-container *ngIf="!artworkImagePreview">
-                  <ion-icon name="image-outline"></ion-icon>
-                  <span>Imagen de la obra</span>
-                </ng-container>
+            <ng-container *ngIf="isArtistProfile(p); else establishmentUpload">
+              <button type="button" class="upload-box add-artwork-btn" (click)="openArtworkForm(p)">
+                <ion-icon name="add-circle-outline"></ion-icon>
+                <span>Nueva obra</span>
               </button>
-
-              <label>
-                <span>Nombre</span>
-                <ion-input class="qz-input" name="title" [(ngModel)]="artworkForm.title" placeholder="Ej. Luz interior"></ion-input>
-              </label>
-
-              <div class="form-grid">
-                <label>
-                  <span>Tamano</span>
-                  <ion-input class="qz-input" name="size" [(ngModel)]="artworkForm.size" placeholder="Ej. 60 x 80 cm"></ion-input>
-                </label>
-
-                <label>
-                  <span>Precio</span>
-                  <ion-input class="qz-input" name="price" type="number" min="0" [(ngModel)]="artworkForm.price" placeholder="MXN"></ion-input>
-                </label>
-              </div>
-
-              <label>
-                <span>Descripcion</span>
-                <ion-textarea
-                  class="qz-input"
-                  name="description"
-                  [(ngModel)]="artworkForm.description"
-                  auto-grow="true"
-                  placeholder="Detalles, materiales o historia de la pieza">
-                </ion-textarea>
-              </label>
-
-              <div class="form-actions">
-                <ion-button type="submit" size="small">
-                  <ion-icon name="save-outline" slot="start"></ion-icon>
-                  {{ editingArtworkId ? 'Guardar cambios' : 'Agregar obra' }}
-                </ion-button>
-                <ion-button type="button" size="small" fill="clear" *ngIf="editingArtworkId" (click)="cancelArtworkEdit()">
-                  Cancelar
-                </ion-button>
-              </div>
-            </form>
+            </ng-container>
 
             <ng-template #establishmentUpload>
               <button type="button" class="upload-box" (click)="addPhotos(p)">
-              <ion-icon name="cloud-upload-outline"></ion-icon>
-              <span>Subir Imagenes</span>
+                <ion-icon name="cloud-upload-outline"></ion-icon>
+                <span>Subir Imagenes</span>
               </button>
             </ng-template>
           </section>
 
           <section class="gallery-section">
             <div class="inline-head">
-              <h2>Obras en exposicion</h2>
+              <h2>{{ isArtistProfile(p) ? 'Obras en exposicion' : 'Fotos del establecimiento' }}</h2>
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </div>
 
@@ -141,17 +100,17 @@
                 <span class="gallery-title">{{ img.title || 'Sin titulo' }}</span>
                 <span class="gallery-meta">{{ img.size || categoryOrStyle(p) }}</span>
                 <ion-button class="del" size="small" fill="clear" (click)="removePhoto(p, i); $event.stopPropagation()" aria-label="Eliminar foto">
-                  <ion-icon name="close-circle"></ion-icon>
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
                 </ion-button>
-                <ion-button class="edit" size="small" fill="clear" *ngIf="isArtistProfile(p)" (click)="editArtwork(img); $event.stopPropagation()" aria-label="Editar obra">
-                  <ion-icon name="create-outline"></ion-icon>
+                <ion-button class="edit" size="small" fill="clear" *ngIf="isArtistProfile(p)" (click)="openArtworkForm(p, img); $event.stopPropagation()" aria-label="Editar obra">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
                 </ion-button>
               </button>
             </div>
 
             <ng-template #emptyGallery>
               <div class="empty-gallery">
-                Aun no tienes imagenes. Presiona Subir Imagenes para construir tu portafolio.
+                {{ isArtistProfile(p) ? 'Aun no tienes obras. Presiona Nueva obra para construir tu portafolio.' : 'Aun no tienes imagenes. Presiona Subir Imagenes para mostrar tu espacio.' }}
               </div>
             </ng-template>
           </section>

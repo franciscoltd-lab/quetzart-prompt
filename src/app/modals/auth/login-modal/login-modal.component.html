@@ -17,9 +17,17 @@
           <ion-input type="email" placeholder="email@dominio.com" [(ngModel)]="email"></ion-input>
         </ion-item>
 
-        <ion-item class="auth-item" lines="none">
-          <ion-input type="password" placeholder="Contrasena" [(ngModel)]="password"></ion-input>
+        <ion-item class="auth-item password-item" lines="none">
+          <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="Contrasena" [(ngModel)]="password"></ion-input>
+          <ion-button fill="clear" slot="end" class="password-toggle" (click)="togglePasswordVisibility()" aria-label="Ver contrasena">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-item>
+
+        <label class="remember-row">
+          <ion-checkbox [(ngModel)]="rememberLogin"></ion-checkbox>
+          <span>Mantener correo guardado</span>
+        </label>
 
         <ion-button expand="block" class="auth-primary" (click)="login()" [disabled]="loading || !email || !password">
           {{ loading ? 'Entrando...' : 'Continuar' }}
@@ -78,8 +86,11 @@
           <p>Elige una contrasena de al menos ocho caracteres.</p>
         </div>
 
-        <ion-item class="auth-item" lines="none">
-          <ion-input type="password" placeholder="Nueva contrasena" [(ngModel)]="newPassword"></ion-input>
+        <ion-item class="auth-item password-item" lines="none">
+          <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="Nueva contrasena" [(ngModel)]="newPassword"></ion-input>
+          <ion-button fill="clear" slot="end" class="password-toggle" (click)="togglePasswordVisibility()" aria-label="Ver contrasena">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-item>
 
         <ion-button expand="block" class="auth-primary" (click)="confirmPasswordReset()" [disabled]="loading || newPassword.length < 8">

@@ -8,6 +8,8 @@ import { AuthApiService } from 'src/app/core/api/auth-api.service';
 import { normalizeImageUrl } from 'src/app/core/utils/image-url';
 import { AccountTypeModalComponent } from '../account-type-modal/account-type-modal.component';
 
+const REMEMBER_EMAIL_KEY = 'qz_login_email';
+
 @Component({
   standalone: false,
   selector: 'app-login-modal',
@@ -21,6 +23,8 @@ export class LoginModalComponent {
   newPassword = '';
   resetStep: 'login' | 'email' | 'code' | 'password' = 'login';
   loading = false;
+  showPassword = false;
+  rememberLogin = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -28,7 +32,13 @@ export class LoginModalComponent {
     private auth: AuthService,
     private profileStore: ProfileStoreService,
     private authApi: AuthApiService,
-  ) { }
+  ) {
+    const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY);
+    if (savedEmail) {
+      this.email = savedEmail;
+      this.rememberLogin = true;
+    }
+  }
 
   dismiss() {
     this.modalCtrl.dismiss();
@@ -131,6 +141,7 @@ export class LoginModalComponent {
     if (!this.email) return;
 
     this.loading = true;
+    this.saveRememberedEmail();
     this.authApi.requestPasswordReset(this.email.trim()).subscribe({
       next: async () => {
         this.loading = false;
@@ -152,6 +163,18 @@ export class LoginModalComponent {
         await t.present();
       },
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  private saveRememberedEmail() {
+    if (this.rememberLogin) {
+      localStorage.setItem(REMEMBER_EMAIL_KEY, this.email.trim());
+    } else {
+      localStorage.removeItem(REMEMBER_EMAIL_KEY);
+    }
   }
 
   verifyPasswordResetCode() {

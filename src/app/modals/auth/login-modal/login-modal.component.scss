@@ -65,6 +65,34 @@
   font-size: 12px;
 }
 
+.password-item {
+  --inner-padding-end: 2px;
+}
+
+.password-toggle {
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --color: var(--qz-text-dim);
+}
+
+.remember-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  color: var(--qz-text-dim);
+  font-size: 11px;
+}
+
+.remember-row ion-checkbox {
+  --size: 16px;
+  --checkbox-background-checked: #111;
+  --border-color-checked: #111;
+}
+
 .auth-link {
   justify-self: center;
   padding: 4px 8px;

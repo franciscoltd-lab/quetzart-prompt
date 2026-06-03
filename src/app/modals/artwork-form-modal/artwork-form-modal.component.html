@@ -1,0 +1,55 @@
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>{{ isEditing ? 'Editar obra' : 'Agregar obra' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <form class="wrap" (ngSubmit)="save()">
+      <button type="button" class="image-picker" (click)="pickImage()">
+        <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de obra" />
+        <span *ngIf="!imagePreview">
+          <ion-icon name="image-outline"></ion-icon>
+          Imagen de la obra
+        </span>
+      </button>
+
+      <label>
+        <span>Nombre</span>
+        <ion-input class="qz-input" name="title" [(ngModel)]="form.title" placeholder="Ej. Luz interior"></ion-input>
+      </label>
+
+      <div class="grid">
+        <label>
+          <span>Tamano</span>
+          <ion-input class="qz-input" name="size" [(ngModel)]="form.size" placeholder="Ej. 60 x 80 cm"></ion-input>
+        </label>
+
+        <label>
+          <span>Precio</span>
+          <ion-input class="qz-input" name="price" type="number" min="0" [(ngModel)]="form.price" placeholder="MXN"></ion-input>
+        </label>
+      </div>
+
+      <label>
+        <span>Descripcion</span>
+        <ion-textarea
+          class="qz-input"
+          name="description"
+          [(ngModel)]="form.description"
+          auto-grow="true"
+          placeholder="Detalles, materiales o historia de la pieza">
+        </ion-textarea>
+      </label>
+
+      <ion-button type="submit" expand="block" [disabled]="saving">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        {{ saving ? 'Guardando...' : (isEditing ? 'Guardar cambios' : 'Agregar obra') }}
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
