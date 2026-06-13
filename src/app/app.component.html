@@ -9,6 +9,9 @@
       <small>
         Version instalada: {{ currentVersion }} - Version minima: {{ minimumVersion }}
       </small>
+      <ion-button class="update-cta" [href]="updateUrl" target="_blank" rel="noopener noreferrer">
+        Actualizar en {{ updateStoreName }}
+      </ion-button>
     </section>
   </main>
 

@@ -5,7 +5,10 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8000',
-  appVersion: '0.0.1'
+  appVersion: '0.0.1',
+  androidUpdateUrl: 'https://play.google.com/store/apps/details?id=mx.quetzart.app',
+  iosUpdateUrl: 'https://apps.apple.com/search?term=Quetzart',
+  appUpdateUrl: 'https://play.google.com/store/apps/details?id=mx.quetzart.app'
 };
 
 /*
