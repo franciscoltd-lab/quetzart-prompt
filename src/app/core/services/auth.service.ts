@@ -13,6 +13,12 @@ export class AuthService {
   login(token: string) {
     localStorage.setItem('token', token);
     const role = this.decodeRole(token);
+    const payload = this.decodePayload(token);
+    console.debug('[qz_auth_front_login]', {
+      sub: payload?.sub ?? null,
+      role: payload?.role ?? role,
+      exp: payload?.exp ?? null,
+    });
     if (role) {
       localStorage.setItem('qz_role', role);
       this.role$.next(role);
@@ -20,6 +26,11 @@ export class AuthService {
     this.token$.next(token);
   }
   logout() {
+    const payload = this.decodePayload(this.token$.value);
+    console.debug('[qz_auth_front_logout]', {
+      sub: payload?.sub ?? null,
+      role: payload?.role ?? this.role$.value,
+    });
     localStorage.removeItem('token');
     localStorage.removeItem('qz_role');
     this.token$.next(null);
@@ -38,6 +49,10 @@ export class AuthService {
     return this.role$.value;
   }
 
+  getTokenPayload(): any | null {
+    return this.decodePayload(this.token$.value);
+  }
+
   loginMock(role: Role) {
     this.token$.next('mock-token');
     this.role$.next(role);
@@ -46,9 +61,14 @@ export class AuthService {
   }
 
   private decodeRole(token: string): Role | null {
+    const payload = this.decodePayload(token);
+    return (payload?.role as Role) || null;
+  }
+
+  private decodePayload(token: string | null): any | null {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1] || ''));
-      return (payload.role as Role) || null;
+      if (!token) return null;
+      return JSON.parse(atob(token.split('.')[1] || ''));
     } catch {
       return null;
     }

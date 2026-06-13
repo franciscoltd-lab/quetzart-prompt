@@ -38,14 +38,28 @@ export class ProfilePage {
   ) {}
 
   ionViewDidEnter() {
+    console.debug('[qz_profile_page_enter]', {
+      isLoggedIn: this.auth.isLoggedIn(),
+      role: this.auth.getRole(),
+      tokenPayload: this.auth.getTokenPayload(),
+    });
     if (this.auth.isLoggedIn()) {
       this.reloadMe();
     }
   }
 
   private reloadMe() {
+    console.debug('[qz_profile_reload_me_start]', {
+      role: this.auth.getRole(),
+      tokenPayload: this.auth.getTokenPayload(),
+    });
     this.authApi.me().subscribe({
       next: (p: any) => {
+        console.debug('[qz_profile_reload_me_success]', {
+          role: p?.role,
+          email: p?.email,
+          galleryCount: p?.gallery?.length ?? 0,
+        });
         const mapped: AppProfile = {
           role: p.role,
           displayName: p.display_name ?? p.displayName,
@@ -75,7 +89,12 @@ export class ProfilePage {
 
         this.profileStore.setProfile(mapped);
       },
-      error: (e) => console.error('me() error', e),
+      error: (e) => console.error('[qz_profile_reload_me_error]', {
+        status: e?.status,
+        message: e?.message,
+        error: e?.error,
+        tokenPayload: this.auth.getTokenPayload(),
+      }),
     });
   }
 
@@ -344,6 +363,11 @@ export class ProfilePage {
     await m.present();
     const { data } = await m.onWillDismiss();
     if (data?.saved) {
+      console.debug('[qz_profile_artwork_modal_saved]', {
+        editing: !!artwork,
+        artworkId: artwork?.id ?? null,
+        tokenPayload: this.auth.getTokenPayload(),
+      });
       this.reloadMe();
       await this.showToast(artwork ? 'Obra actualizada.' : 'Obra agregada.');
     }

@@ -61,10 +61,19 @@ export class LoginModalComponent {
     this.authApi.login(this.email.trim(), this.password).subscribe({
       next: (res) => {
         this.auth.login(res.access_token);
+        console.debug('[qz_login_modal_login_success_before_me]', {
+          tokenPayload: this.auth.getTokenPayload(),
+        });
 
         // Cargar perfil real
         this.authApi.me().subscribe({
           next: (p: any) => {
+            console.debug('[qz_login_modal_me_success]', {
+              role: p?.role,
+              email: p?.email,
+              galleryCount: p?.gallery?.length ?? 0,
+              tokenPayload: this.auth.getTokenPayload(),
+            });
             // adapta keys del backend -> AppProfile (si hace falta)
             // yo asumo que tu backend devuelve: role, display_name, profile_image_url, etc.
             const mapped: AppProfile = {
@@ -102,6 +111,9 @@ export class LoginModalComponent {
             this.modalCtrl.dismiss();
           },
           error: async () => {
+            console.error('[qz_login_modal_me_error]', {
+              tokenPayload: this.auth.getTokenPayload(),
+            });
             this.loading = false;
             const t = await this.toastCtrl.create({
               message: 'Entraste, pero no pude cargar tu perfil (/profile/me).',

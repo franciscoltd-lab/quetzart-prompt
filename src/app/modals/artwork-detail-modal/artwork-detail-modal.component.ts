@@ -28,6 +28,12 @@ export class ArtworkDetailModalComponent {
   ) {}
 
   ngOnInit() {
+    console.debug('[qz_artwork_detail_init]', {
+      artworkId: this.artworkId,
+      isLoggedIn: this.auth.isLoggedIn(),
+      role: this.auth.getRole(),
+      tokenPayload: this.auth.getTokenPayload(),
+    });
     if (!this.artworkId || !this.auth.isLoggedIn()) return;
     this.socialApi.favoriteStatus(this.artworkId).subscribe({
       next: (status) => {
@@ -120,6 +126,10 @@ export class ArtworkDetailModalComponent {
             this.authApi.continueAsGuest().subscribe({
               next: (res) => {
                 this.auth.login(res.access_token);
+                console.debug('[qz_artwork_detail_guest_login_for_favorite]', {
+                  artworkId: this.artworkId,
+                  tokenPayload: this.auth.getTokenPayload(),
+                });
                 this.toggleFavorite();
               },
             });

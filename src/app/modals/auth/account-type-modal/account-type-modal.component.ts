@@ -48,6 +48,9 @@ export class AccountTypeModalComponent {
     this.authApi.continueAsGuest().subscribe({
       next: (res) => {
         this.auth.login(res.access_token);
+        console.debug('[qz_account_type_guest_login]', {
+          tokenPayload: this.auth.getTokenPayload(),
+        });
         this.dismiss();
       },
     });

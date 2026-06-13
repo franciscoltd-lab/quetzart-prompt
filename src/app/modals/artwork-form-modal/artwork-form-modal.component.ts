@@ -3,6 +3,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { AuthApiService } from '../../core/api/auth-api.service';
 import { GalleryItem } from '../../core/models/profile.model';
 import { PhotoService } from '../../core/services/photo.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   standalone: false,
@@ -28,6 +29,7 @@ export class ArtworkFormModalComponent {
     private toastCtrl: ToastController,
     private authApi: AuthApiService,
     private photo: PhotoService,
+    private auth: AuthService,
   ) {}
 
   ionViewWillEnter() {
@@ -83,14 +85,34 @@ export class ArtworkFormModalComponent {
     if (this.form.image_base64) payload.image_base64 = this.form.image_base64;
 
     this.saving = true;
+    console.debug('[qz_artwork_form_save_start]', {
+      isEditing: this.isEditing,
+      artworkId: this.artwork?.id ?? null,
+      fields: Object.keys(payload),
+      hasDescription: payload.description !== null,
+      hasImage: !!payload.image_base64,
+      tokenPayload: this.auth.getTokenPayload(),
+    });
     const request$ = this.isEditing && this.artwork
       ? this.authApi.updateArtwork(this.artwork.id, payload)
       : this.authApi.createArtwork(payload);
 
     request$.subscribe({
-      next: () => this.modalCtrl.dismiss({ saved: true }),
+      next: (res) => {
+        console.debug('[qz_artwork_form_save_success]', {
+          isEditing: this.isEditing,
+          artworkId: res?.id ?? this.artwork?.id ?? null,
+          tokenPayload: this.auth.getTokenPayload(),
+        });
+        this.modalCtrl.dismiss({ saved: true });
+      },
       error: async (e) => {
-        console.error('saveArtwork error', e);
+        console.error('[qz_artwork_form_save_error]', {
+          status: e?.status,
+          message: e?.message,
+          error: e?.error,
+          tokenPayload: this.auth.getTokenPayload(),
+        });
         this.saving = false;
         await this.showToast('No se pudo guardar la obra.');
       },
