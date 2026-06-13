@@ -1,9 +1,9 @@
 .split {
-  min-height: 100vh;
+  min-height: 100%;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr auto;
   gap: 12px;
-  padding: 16px;
+  padding: 16px 16px calc(16px + var(--qz-modal-safe-bottom));
 }
 
 .half {

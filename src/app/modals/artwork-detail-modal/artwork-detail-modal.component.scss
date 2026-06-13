@@ -1,6 +1,6 @@
 .artwork-detail {
   min-height: 100%;
-  padding: 18px 14px 34px;
+  padding: 18px 14px calc(34px + var(--qz-modal-safe-bottom));
   display: grid;
   align-content: start;
   gap: 16px;
@@ -136,6 +136,6 @@
   .artwork-detail {
     width: min(760px, 100%);
     margin: 0 auto;
-    padding: 22px 18px 40px;
+    padding: 22px 18px calc(40px + var(--qz-modal-safe-bottom));
   }
 }

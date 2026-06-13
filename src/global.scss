@@ -46,6 +46,10 @@ ion-content {
   --background: #ffffff;
 }
 
+:root {
+  --qz-modal-safe-bottom: max(28px, env(safe-area-inset-bottom));
+}
+
 html,
 body,
 ion-app,
@@ -160,6 +164,10 @@ ion-searchbar {
 .artwork-sheet{width:100%;box-shadow:0 22px 70px rgba(0,0,0,.22)}.product-info{gap:12px}.product-info h2{font-size:clamp(24px,6vw,34px);line-height:1.05}.product-owner{font-size:15px}.product-specs{grid-template-columns:1fr;gap:10px;padding:14px 0;font-size:14px}.product-specs span{display:flex;justify-content:space-between;gap:16px}.product-description{font-size:15px;line-height:1.55;white-space:pre-wrap}@media (min-width:760px){.artwork-sheet{width:min(860px,calc(100vw - 48px));max-height:calc(100vh - 48px)}.product-photo img{max-height:58vh}.product-info{padding:28px 32px 32px}.product-specs{grid-template-columns:repeat(2,minmax(0,1fr))}.product-specs span{display:grid;gap:4px}}
 
 ion-modal.qz-large-modal{--background:#fff;--width:80vw;--height:80vh;--border-radius:14px}ion-modal.qz-large-modal::part(content){background:#fff}@media (max-width:520px){ion-modal.qz-large-modal{--width:92vw;--height:80vh}}
+
+ion-modal ion-content {
+  --padding-bottom: var(--qz-modal-safe-bottom);
+}
 
 ion-modal.qz-large-modal{--width:100vw;--height:100vh;--border-radius:0}.artwork-viewer{place-items:center;align-items:center;padding:0}.artwork-sheet{width:90vw;max-height:90vh;border-radius:12px}.product-photo img{max-height:54vh}@media (min-width:760px){.artwork-sheet{width:90vw;max-height:90vh}.product-photo img{max-height:56vh}}
 

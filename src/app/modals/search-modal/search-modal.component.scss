@@ -1,8 +1,8 @@
 .search-modal {
   width: min(900px, 100%);
-  min-height: 100dvh;
+  min-height: 100%;
   margin: 0 auto;
-  padding: 16px 12px 32px;
+  padding: 16px 12px calc(32px + var(--qz-modal-safe-bottom));
   display: grid;
   align-content: start;
   gap: 12px;

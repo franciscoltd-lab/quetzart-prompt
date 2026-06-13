@@ -1,6 +1,6 @@
 .auth-screen {
   min-height: 100%;
-  padding: 18px 16px 28px;
+  padding: 18px 16px calc(28px + var(--qz-modal-safe-bottom));
   display: grid;
   align-content: start;
   background: #fff;

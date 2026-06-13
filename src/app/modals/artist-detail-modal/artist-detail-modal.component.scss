@@ -2,7 +2,7 @@
   position: relative;
   width: min(980px, 100%);
   margin: 0 auto;
-  padding: 18px 10px 28px;
+  padding: 18px 10px calc(28px + var(--qz-modal-safe-bottom));
   display: grid;
   gap: 18px;
 }
@@ -146,7 +146,7 @@
   z-index: 1000;
   display: grid;
   place-items: center;
-  padding: 54px 12px 28px;
+  padding: 54px 12px calc(28px + var(--qz-modal-safe-bottom));
   overflow: auto;
   background: rgba(0, 0, 0, 0.92);
 }
@@ -179,7 +179,7 @@
 
 @media (min-width: 760px) {
   .artist-detail {
-    padding: 24px 18px 18px;
+    padding: 24px 18px calc(18px + var(--qz-modal-safe-bottom));
   }
 
   .artist-hero {
