@@ -32,8 +32,14 @@
         </div>
       </dl>
 
-      <ion-button expand="block" fill="outline" class="favorite-btn">
-        Anadir a Favoritos
+      <ion-button expand="block" fill="outline" class="favorite-btn" (click)="toggleFavorite()">
+        <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+        {{ isFavorite ? 'En favoritos' : 'Anadir a favoritos' }}
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" class="share-btn" (click)="shareArtwork()">
+        <ion-icon name="share-social-outline" slot="start"></ion-icon>
+        Compartir
       </ion-button>
 
       <ion-button expand="block" class="buy-btn" (click)="openBankInfo()">

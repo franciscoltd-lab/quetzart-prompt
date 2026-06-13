@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { PublicApiService } from 'src/app/core/api/public-api.service';
 import { IonContent, IonHeader } from "@ionic/angular/standalone";
+import { ArtworkDetailModalComponent } from '../artwork-detail-modal/artwork-detail-modal.component';
 
 @Component({
   standalone: false,
@@ -58,14 +59,23 @@ export class ArtistDetailModalComponent implements OnInit {
     this.imageZoomed = !this.imageZoomed;
   }
 
-  openArtwork(item: any, index: number) {
-    this.selectedArtwork = {
+  async openArtwork(item: any, index: number) {
+    const artwork = {
+      id: item.id,
       image_url: item.image_url,
       title: item.title || 'Sin titulo',
       size: item.size || item.tamano || 'No especificado',
       price: item.price || item.precio || 'Precio a consultar',
       description: item.description || item.caption || this.artist?.bio || `Obra del portafolio de ${this.artist?.display_name}.`,
+      artist: this.artist?.display_name,
     };
+    const m = await this.modalCtrl.create({
+      component: ArtworkDetailModalComponent,
+      componentProps: { artwork },
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
+    await m.present();
   }
 
   closeArtwork() {

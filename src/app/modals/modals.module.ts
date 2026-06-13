@@ -13,6 +13,7 @@ import { LoginModalComponent } from './auth/login-modal/login-modal.component';
 import { AccountTypeModalComponent } from './auth/account-type-modal/account-type-modal.component';
 import { RegisterArtistModalComponent } from './auth/register-artist-modal/register-artist-modal.component';
 import { RegisterEstablishmentModalComponent } from './auth/register-establishment-modal/register-establishment-modal.component';
+import { RegisterViewerModalComponent } from './auth/register-viewer-modal/register-viewer-modal.component';
 import { EditTextModalComponent } from './common/edit-text-modal/edit-text-modal.component';
 import { ArtistDetailModalComponent } from './artist-detail-modal/artist-detail-modal.component';
 import { SearchModalComponent } from './search-modal/search-modal.component';
@@ -29,6 +30,7 @@ import { ArtworkFormModalComponent } from './artwork-form-modal/artwork-form-mod
     AccountTypeModalComponent,
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
+    RegisterViewerModalComponent,
     EditTextModalComponent,
     ArtistDetailModalComponent,
     SearchModalComponent,
@@ -50,6 +52,7 @@ import { ArtworkFormModalComponent } from './artwork-form-modal/artwork-form-mod
     AccountTypeModalComponent,
     RegisterArtistModalComponent,
     RegisterEstablishmentModalComponent,
+    RegisterViewerModalComponent,
     EditTextModalComponent,
     ArtistDetailModalComponent,
     SearchModalComponent,

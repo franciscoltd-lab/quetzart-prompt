@@ -17,6 +17,14 @@
       <button class="half est" (click)="select('establishment')">
         <div class="label">ESTABLECIMIENTO</div>
       </button>
+
+      <button class="half viewer" (click)="select('viewer')">
+        <div class="label">ESPECTADOR</div>
+      </button>
+
+      <ion-button expand="block" fill="outline" class="guest-btn" (click)="continueAsGuest()">
+        Continuar como invitado
+      </ion-button>
     </div>
   </div>
 </ion-content>

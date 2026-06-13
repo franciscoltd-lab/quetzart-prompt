@@ -51,6 +51,20 @@ export class AuthApiService {
         );
     }
 
+    registerViewer(payload: any) {
+        return this.http.post<{ access_token: string; token_type: string }>(
+            `${this.baseUrl}/auth/register-viewer`,
+            payload
+        );
+    }
+
+    continueAsGuest(displayName = 'Invitado Quetzart') {
+        return this.http.post<{ access_token: string; token_type: string }>(
+            `${this.baseUrl}/auth/guest`,
+            { display_name: displayName }
+        );
+    }
+
     me() {
         return this.http.get(`${this.baseUrl}/profile/me`);
     }

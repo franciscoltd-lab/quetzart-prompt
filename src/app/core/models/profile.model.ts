@@ -1,4 +1,4 @@
-export type Role = 'artist' | 'establishment' | 'admin';
+export type Role = 'artist' | 'establishment' | 'admin' | 'viewer' | 'guest';
 
 export type GalleryItem = {
   id: number;

@@ -8,6 +8,7 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       { path: 'home', loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule) },
+      { path: 'messages', loadChildren: () => import('../pages/messages/messages.module').then(m => m.MessagesPageModule) },
       { path: 'map', loadChildren: () => import('../pages/map/map.module').then(m => m.MapPageModule) },
       { path: 'profile', loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfilePageModule) },
       // {

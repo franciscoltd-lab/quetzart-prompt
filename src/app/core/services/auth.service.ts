@@ -12,11 +12,18 @@ export class AuthService {
 
   login(token: string) {
     localStorage.setItem('token', token);
+    const role = this.decodeRole(token);
+    if (role) {
+      localStorage.setItem('qz_role', role);
+      this.role$.next(role);
+    }
     this.token$.next(token);
   }
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('qz_role');
     this.token$.next(null);
+    this.role$.next(null);
     this.profileStore.clear();
   }
 
@@ -36,5 +43,14 @@ export class AuthService {
     this.role$.next(role);
     localStorage.setItem('qz_token', 'mock-token');
     localStorage.setItem('qz_role', role);
+  }
+
+  private decodeRole(token: string): Role | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1] || ''));
+      return (payload.role as Role) || null;
+    } catch {
+      return null;
+    }
   }
 }

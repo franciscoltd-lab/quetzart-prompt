@@ -1,0 +1,34 @@
+<ion-header class="qz-header">
+  <ion-toolbar class="qz-header">
+    <ion-title>Registro - Espectador</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="qz-bg">
+    <form [formGroup]="form" class="viewer-form">
+      <ion-item lines="none">
+        <ion-input label="Nombre" labelPlacement="stacked" formControlName="displayName"></ion-input>
+      </ion-item>
+      <div class="err" *ngIf="f.displayName.touched && f.displayName.invalid">Nombre requerido.</div>
+
+      <ion-item lines="none">
+        <ion-input label="Email" labelPlacement="stacked" type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <div class="err" *ngIf="f.email.touched && f.email.invalid">Email invalido.</div>
+
+      <ion-item lines="none">
+        <ion-input label="Contrasena" labelPlacement="stacked" type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <div class="hint">Min. 8 caracteres, 1 mayuscula, 1 numero y 1 caracter especial.</div>
+      <div class="err" *ngIf="f.password.touched && f.password.invalid">Contrasena no cumple.</div>
+
+      <ion-button expand="block" class="cta" [disabled]="form.invalid" (click)="submit()">
+        Crear cuenta
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
