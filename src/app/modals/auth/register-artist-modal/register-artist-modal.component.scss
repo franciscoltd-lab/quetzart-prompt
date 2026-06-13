@@ -39,12 +39,56 @@
   border: 1px solid var(--qz-border);
   border-radius: var(--qz-radius);
   margin-top: 6px;
+  position: relative;
+}
+
+.item:has(.ng-invalid.ng-touched) {
+  --highlight-color-focused: #b3261e;
+  --background: #fff7f7;
+  border-color: #b3261e;
+  border-width: 2px;
+  box-shadow: 0 0 0 3px rgb(179 38 30 / 12%);
+}
+
+.item:has(.ng-invalid.ng-touched)::after {
+  content: "!";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #b3261e;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.validation-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #b3261e;
+  border-radius: var(--qz-radius);
+  background: #fff7f7;
+  color: #8f1d17;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .err {
-  margin-top: -2px;
+  width: fit-content;
+  margin-top: -4px;
+  padding: 4px 8px;
+  border-radius: var(--qz-radius-sm);
+  background: #fff0f0;
   font-size: 12px;
-  color: #000000;
+  font-weight: 600;
+  color: #b3261e;
 }
 
 .hint {

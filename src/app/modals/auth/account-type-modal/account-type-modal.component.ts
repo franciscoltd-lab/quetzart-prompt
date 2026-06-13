@@ -37,8 +37,8 @@ export class AccountTypeModalComponent {
 
     const m = await this.modalCtrl.create({
       component,
-      breakpoints: [0, 0.95],
-      initialBreakpoint: 0.95,
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
 
     await m.present();

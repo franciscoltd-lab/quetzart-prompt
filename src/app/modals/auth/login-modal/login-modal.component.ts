@@ -47,8 +47,8 @@ export class LoginModalComponent {
   async openAccountType() {
     const m = await this.modalCtrl.create({
       component: AccountTypeModalComponent,
-      breakpoints: [0, 0.95],
-      initialBreakpoint: 0.95,
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
     await m.present();
   }

@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { MessagesApiService } from 'src/app/core/api/messages-api.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { LoginModalComponent } from 'src/app/modals/auth/login-modal/login-modal.component';
 
 @Component({
   standalone: false,
@@ -19,7 +20,8 @@ export class MessagesPage implements OnDestroy {
   constructor(
     public auth: AuthService,
     private messagesApi: MessagesApiService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController
   ) {}
 
   ionViewDidEnter() {
@@ -49,6 +51,17 @@ export class MessagesPage implements OnDestroy {
         }
       },
     });
+  }
+
+  async openLogin() {
+    const modal = await this.modalCtrl.create({
+      component: LoginModalComponent,
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+    this.loadConversations();
   }
 
   selectConversation(conversation: any) {

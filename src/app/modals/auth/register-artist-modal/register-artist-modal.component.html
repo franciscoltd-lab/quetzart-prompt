@@ -25,6 +25,11 @@
       <form [formGroup]="form" class="qz-glass block">
         <div class="block-title">Datos del artista</div>
 
+        <div class="validation-summary" *ngIf="form.invalid && form.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>Revisa los campos remarcados para continuar.</span>
+        </div>
+
         <ion-item class="item" lines="none">
           <ion-input label="Nombre completo" labelPlacement="stacked" formControlName="fullName"></ion-input>
         </ion-item>
@@ -59,10 +64,10 @@
         <div class="err" *ngIf="f.password.touched && f.password.invalid">Contraseña no cumple.</div>
 
         <ion-item class="item" lines="none">
-          <ion-textarea label="Resumen" labelPlacement="stacked" formControlName="bio" autoGrow="true"></ion-textarea>
+          <ion-textarea label="Resumen (opcional)" labelPlacement="stacked" formControlName="bio" autoGrow="true"></ion-textarea>
         </ion-item>
         <div class="err" *ngIf="f.bio.touched && f.bio.invalid">
-          Escribe mínimo 20 caracteres.
+          Si escribes un resumen, debe tener minimo 20 caracteres.
         </div>
       </form>
 
@@ -89,7 +94,7 @@
         <div class="hint" *ngIf="!portfolio.length">Puedes subir varias imágenes de tus obras.</div>
       </div>
 
-      <ion-button expand="block" class="cta" [disabled]="form.invalid" (click)="submit()">
+      <ion-button expand="block" class="cta" (click)="submit()">
         Registrar
       </ion-button>
 

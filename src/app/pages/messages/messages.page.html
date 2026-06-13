@@ -5,8 +5,18 @@
         <h1>Mensajes</h1>
       </header>
 
-      <div class="empty" *ngIf="!auth.isLoggedIn()">
-        Inicia sesion para ver tus mensajes.
+      <div class="login-empty" *ngIf="!auth.isLoggedIn()">
+        <div class="login-art">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </div>
+        <div class="login-copy">
+          <span>Mensajes privados</span>
+          <h2>Inicia sesion para ver tus conversaciones</h2>
+          <p>Conecta con artistas y establecimientos, da seguimiento a tus obras favoritas y responde desde un solo lugar.</p>
+        </div>
+        <ion-button expand="block" class="login-cta" (click)="openLogin()">
+          Iniciar sesion
+        </ion-button>
       </div>
 
       <div class="empty" *ngIf="auth.isLoggedIn() && !conversations.length">

@@ -1,3 +1,18 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <main *ngIf="updateRequired; else appReady" class="version-blocker">
+    <section>
+      <p class="version-kicker">Actualizacion requerida</p>
+      <h1>Tienes una version anterior</h1>
+      <p>
+        Debes actualizar Quetzart para poder entrar a la app.
+      </p>
+      <small>
+        Version instalada: {{ currentVersion }} - Version minima: {{ minimumVersion }}
+      </small>
+    </section>
+  </main>
+
+  <ng-template #appReady>
+    <ion-router-outlet></ion-router-outlet>
+  </ng-template>
 </ion-app>

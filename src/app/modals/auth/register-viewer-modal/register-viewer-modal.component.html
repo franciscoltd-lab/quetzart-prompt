@@ -10,6 +10,11 @@
 <ion-content>
   <div class="qz-bg">
     <form [formGroup]="form" class="viewer-form">
+      <div class="validation-summary" *ngIf="form.invalid && form.touched">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <span>Revisa los campos remarcados para continuar.</span>
+      </div>
+
       <ion-item lines="none">
         <ion-input label="Nombre" labelPlacement="stacked" formControlName="displayName"></ion-input>
       </ion-item>
@@ -26,7 +31,7 @@
       <div class="hint">Min. 8 caracteres, 1 mayuscula, 1 numero y 1 caracter especial.</div>
       <div class="err" *ngIf="f.password.touched && f.password.invalid">Contrasena no cumple.</div>
 
-      <ion-button expand="block" class="cta" [disabled]="form.invalid" (click)="submit()">
+      <ion-button expand="block" class="cta" (click)="submit()">
         Crear cuenta
       </ion-button>
     </form>

@@ -27,6 +27,11 @@
       <form [formGroup]="form" class="qz-glass block">
         <div class="block-title">Datos del establecimiento</div>
 
+        <div class="validation-summary" *ngIf="form.invalid && form.touched">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>Revisa los campos remarcados para continuar.</span>
+        </div>
+
         <!-- EMAIL -->
         <ion-item class="item" lines="none">
           <ion-input
@@ -163,7 +168,6 @@
       <ion-button
         expand="block"
         class="cta"
-        [disabled]="form.invalid"
         (click)="submit()">
         Registrar
       </ion-button>

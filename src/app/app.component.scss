@@ -1,0 +1,41 @@
+.version-blocker {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #ffffff;
+  color: #000000;
+  text-align: center;
+}
+
+.version-blocker section {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 12px;
+}
+
+.version-kicker {
+  margin: 0;
+  color: var(--qz-text-soft);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.version-blocker h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.08;
+}
+
+.version-blocker p {
+  margin: 0;
+  color: var(--qz-text-dim);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.version-blocker small {
+  color: var(--qz-text-soft);
+  font-size: 12px;
+}

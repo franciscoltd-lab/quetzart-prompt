@@ -30,7 +30,7 @@ export class RegisterArtistModalComponent {
     age: [null as any, [Validators.required, Validators.min(14), Validators.max(120)]],
     curp: ['', [Validators.required, Validators.pattern(CURP_REGEX)]],
     password: ['', [Validators.required, Validators.pattern(STRONG_PASSWORD_REGEX)]],
-    bio: ['', [Validators.required, Validators.minLength(20)]],
+    bio: ['', [Validators.minLength(20)]],
   });
 
   constructor(
@@ -77,7 +77,7 @@ export class RegisterArtistModalComponent {
       password: String(v.password || ''),
       display_name: String(v.fullName || '').trim(),
       artistic_style: String(v.artisticStyle || '').trim(),
-      bio: String(v.bio || '').trim(),
+      bio: String(v.bio || '').trim() || null,
       profile_image_base64: this.profileImagePreview, // dataURL o null
       gallery_base64: [...this.portfolio],            // dataURL[]
     };

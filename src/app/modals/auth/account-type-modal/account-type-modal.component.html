@@ -11,20 +11,32 @@
   <div class="qz-bg">
     <div class="split">
       <button class="half artist" (click)="select('artist')">
-        <div class="label">ARTISTA</div>
+        <div class="label">
+          <strong>ARTISTA</strong>
+          <small>Comparte obra, portafolio y eventos.</small>
+        </div>
       </button>
 
       <button class="half est" (click)="select('establishment')">
-        <div class="label">ESTABLECIMIENTO</div>
+        <div class="label">
+          <strong>ESTABLECIMIENTO</strong>
+          <small>Publica tu espacio y conecta con artistas.</small>
+        </div>
       </button>
 
       <button class="half viewer" (click)="select('viewer')">
-        <div class="label">ESPECTADOR</div>
+        <div class="label">
+          <strong>ESPECTADOR</strong>
+          <small>Descubre arte, lugares y experiencias.</small>
+        </div>
       </button>
 
-      <ion-button expand="block" fill="outline" class="guest-btn" (click)="continueAsGuest()">
-        Continuar como invitado
-      </ion-button>
+      <button class="half guest" (click)="continueAsGuest()">
+        <div class="label">
+          <strong>INVITADO</strong>
+          <small>Explora Quetzart sin crear cuenta.</small>
+        </div>
+      </button>
     </div>
   </div>
 </ion-content>

@@ -133,8 +133,8 @@ export class ArtworkDetailModalComponent {
   private async openAccountTypeModal() {
     const m = await this.modalCtrl.create({
       component: AccountTypeModalComponent,
-      breakpoints: [0, 0.7],
-      initialBreakpoint: 0.7,
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
     });
     await m.present();
   }
